@@ -67,7 +67,7 @@ class HRV: RCTEventEmitter {
       let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate,
                                             ascending: false)
       
-      let limit = 1000
+      let limit = 10
       
       let sampleQuery = HKSampleQuery(sampleType: HKSeriesType.heartbeat(),
                                       predicate: mostRecentPredicate,
