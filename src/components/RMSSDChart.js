@@ -4,7 +4,6 @@ import axios from "axios"
 import { quantile } from './utils/math'
 import moment from 'moment'
 import {VictoryLine, VictoryChart, VictoryBrushContainer, VictoryTooltip, createContainer, VictoryLegend} from 'victory-native'
-//import MultiToggle from 'react-multi-toggle'
 import Spinner from './Spinner.js'
 import {REACT_APP_BACKEND_URI} from 'react-native-dotenv'
 import UpdateData from './UpdateData'
@@ -24,7 +23,7 @@ export default function RMSSDChart() {
 
 
   useEffect(() => {
-    axios.get(`${REACT_APP_BACKEND_URI}/recent`)
+    axios.get(`${REACT_APP_BACKEND_URI}/hrv`)
       .then((response) => {
         let r = response.data.data
         let rMSSDArr = r.map(datum => datum.rMSSD)
@@ -92,14 +91,14 @@ return (
             /> )}
             <Text>AVERAGE</Text>
             <Text>{average} </Text>
-            <VictoryChart width={400} height={500}  scale={{x: "time"}}
+            <VictoryChart width={390} height={500}  scale={{x: "time"}}
             //   animate={{
             //     duration: 1000,
             //     onLoad: { duration: 250 }
             //   }}
               containerComponent={
                 <VictoryZoomVoronoiContainer responsive={true}
-                  allowZoom={true}
+                  allowZoom={false}
                   zoomDomain={selectedDomain}
                   onZoomDomainChange={handleZoom}              
                 />

@@ -13,24 +13,19 @@ import HealthKit
 class HRV: RCTEventEmitter {
   
   @objc
-  override static func requiresMainQueueSetup() -> Bool {
-    return true
-  }
-  
-  // Returns an array of your named events
-  @objc
-  override func supportedEvents() -> [String]! {
-    return ["OnHRVComplete"]
-  }
-  
-  @objc
   func getLatestHRV() {
     getMostRecentHRVSeriesSample()
   }
   
   @objc
   func getHRVSince() {
+    //TODO: add HRV since date parameter
     getMostRecentHRSeriesSamples()
+  }
+  
+  @objc
+  func getRHRSince() {
+    getMostRecentRHRs()
   }
   
   @objc
@@ -66,7 +61,7 @@ class HRV: RCTEventEmitter {
       
       let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate,
                                             ascending: false)
-      
+      //TODO: parameterize
       let limit = 5000
       
       let sampleQuery = HKSampleQuery(sampleType: HKSeriesType.heartbeat(),
@@ -103,16 +98,12 @@ class HRV: RCTEventEmitter {
           }
         self.getBeatToBeatMeasurments(seriesSample: sample)
       }
-    
-      
-      
   }
   
   @objc
   func getMostRecentHRSeriesSample(completion: @escaping (HKHeartbeatSeriesSample?, Error?) -> Swift.Void) {
       
       //1. Use HKQuery to load the most recent samples.
-//      let semaphore = DispatchSemaphore(value: 0)
       let mostRecentPredicate = HKQuery.predicateForSamples(withStart: Date.distantPast,
                                                             end: Date(),
                                                             options: .strictEndDate)
@@ -138,13 +129,10 @@ class HRV: RCTEventEmitter {
                                               }
                                               
                                               completion(mostRecentSample, nil)
-//                                              semaphore.signal()
-                                              
+                                            
                                           }
       }
-      
       HKHealthStore().execute(sampleQuery)
-//      semaphore.wait()
   }
   
   @objc
@@ -153,7 +141,6 @@ class HRV: RCTEventEmitter {
       let endDate = seriesSample.endDate
       print("start date", startDate)
       print("end date", endDate)
-//      var returnString = ""
       let semaphore = DispatchSemaphore (value: 0)
       var postParams = ""
       
@@ -178,28 +165,7 @@ class HRV: RCTEventEmitter {
       let parameters = "{\"beatToBeat\": [\(postParams.dropLast())],\"date\":\"\(endDate)\"}" //remove last , and add brackets for JSON array
       print("parameters", parameters)
       
-//      let postData = parameters.data(using: .utf8)
-      
-      //need to make url dynamic
-//      var request = URLRequest(url: URL(string: "http://192.168.0.8:3001/gethrv")!,timeoutInterval: Double.infinity)
-//      request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//      request.httpMethod = "POST"
-//      request.httpBody = postData
-//
-//      let task = URLSession.shared.dataTask(with: request) { data, response, error in
-//          guard let data = data else {
-//              print(String(describing: error))
-//              return
-//          }
-//           //shall I do something with the response?
-//          returnString = String(data: data, encoding: .utf8)!
-//          print(returnString)
-//          semaphore.signal()
-//      }
-//
-//      task.resume()
-//      semaphore.wait() //wait for REST call to finish
-    sendEvent(withName: "OnHRVComplete", body: ["beatData": parameters])
+      sendEvent(withName: "OnHRVComplete", body: ["beatData": parameters]) //send each reading beat data to react native app
   }
   
 
@@ -247,5 +213,82 @@ class HRV: RCTEventEmitter {
     }
     return true
   }
+  
+  @objc
+  func getMostRecentRHRs() {
+      guard let sampleType = HKSampleType.quantityType(forIdentifier: .restingHeartRate) else {
+          print("HR Sample Type is no longer available in HealthKit")
+          return
+      }
+      
+      self.getSamples(for: sampleType) { (samples, error) in
+          
+          guard let samples = samples else {
+              
+              if let error = error {
+                  print(error.localizedDescription)
+              }
+              
+              return
+          }
+          
+          for sample in samples {
+              let heartRateSample = sample.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute()))
+              let timestamp = sample.endDate
+              let sampleJson = "{\"heartrate\":\(heartRateSample),\"timestamp\":\"\(timestamp)\"}"
+            self.sendEvent(withName: "OnRHRComplete", body: ["rhrData": sampleJson]) //send each reading beat data to react native app
+
+              //print("RHR sample: \(heartRateSample), Timestamp: \(timestamp)")
+          }
+          
+      }
+  }
+  
+  @objc
+  func getSamples(for sampleType: HKSampleType,
+                            completion: @escaping ([HKQuantitySample]?, Error?) -> Swift.Void) {
+      
+      //1. Use HKQuery to load the most recent samples.
+      let mostRecentPredicate = HKQuery.predicateForSamples(withStart: Date.distantPast,
+                                                            end: Date(),
+                                                            options: .strictEndDate)
+      
+      let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate,
+                                            ascending: false)
+      
+      let limit = 5000
+      
+      let sampleQuery = HKSampleQuery(sampleType: sampleType,
+                                      predicate: mostRecentPredicate,
+                                      limit: limit,
+                                      sortDescriptors: [sortDescriptor]) { (query, samples, error) in
+                                          
+                                          //2. Always dispatch to the main thread when complete.
+                                          DispatchQueue.main.async {
+                                              
+                                              guard let samples = samples as? [HKQuantitySample] else {
+                                                      
+                                                      completion(nil, error)
+                                                      return
+                                              }
+                                              
+                                              completion(samples, nil)
+                                              
+                                          }
+      }
+      
+      HKHealthStore().execute(sampleQuery)
+  }
+  
+  @objc
+   override static func requiresMainQueueSetup() -> Bool {
+     return true
+   }
+   
+   // Returns an array of your named events
+   @objc
+   override func supportedEvents() -> [String]! {
+     return ["OnHRVComplete", "OnRHRComplete"]
+   }
   
 }
