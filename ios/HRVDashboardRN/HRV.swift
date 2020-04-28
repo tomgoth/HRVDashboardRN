@@ -24,8 +24,13 @@ class HRV: RCTEventEmitter {
   }
   
   @objc
+  func getLatestRHR() {
+    getMostRecentRHRs(limit: 1)
+  }
+  
+  @objc
   func getRHRSince() {
-    getMostRecentRHRs()
+    getMostRecentRHRs(limit: 5000)
   }
   
   @objc
@@ -215,13 +220,13 @@ class HRV: RCTEventEmitter {
   }
   
   @objc
-  func getMostRecentRHRs() {
+  func getMostRecentRHRs(limit: Int) {
       guard let sampleType = HKSampleType.quantityType(forIdentifier: .restingHeartRate) else {
           print("HR Sample Type is no longer available in HealthKit")
           return
       }
       
-      self.getSamples(for: sampleType) { (samples, error) in
+    self.getSamples(for: sampleType, limit: limit) { (samples, error) in
           
           guard let samples = samples else {
               
@@ -233,6 +238,7 @@ class HRV: RCTEventEmitter {
           }
           
           for sample in samples {
+            print (sample.quantity)
               let heartRateSample = sample.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute()))
               let timestamp = sample.endDate
               let sampleJson = "{\"heartrate\":\(heartRateSample),\"timestamp\":\"\(timestamp)\"}"
@@ -245,7 +251,7 @@ class HRV: RCTEventEmitter {
   }
   
   @objc
-  func getSamples(for sampleType: HKSampleType,
+  func getSamples(for sampleType: HKSampleType, limit: Int,
                             completion: @escaping ([HKQuantitySample]?, Error?) -> Swift.Void) {
       
       //1. Use HKQuery to load the most recent samples.
@@ -256,7 +262,7 @@ class HRV: RCTEventEmitter {
       let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate,
                                             ascending: false)
       
-      let limit = 5000
+//      let limit = 5000
       
       let sampleQuery = HKSampleQuery(sampleType: sampleType,
                                       predicate: mostRecentPredicate,

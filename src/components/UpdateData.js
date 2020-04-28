@@ -2,7 +2,7 @@ import { NativeModules, Button, Text } from 'react-native'
 import React, {useState} from 'react'
 import axios from 'axios';
 import {REACT_APP_BACKEND_URI} from 'react-native-dotenv'
-import {getHRVSince, getLatestHRV, getRHRSince} from './utils/GetHRVNative'
+import {getHRVSince, getLatestHRV, getRHRSince, getLatestRHR} from './utils/GetHRVNative'
 
 
 NativeModules.HRV.authorizeHealthKit()
@@ -28,9 +28,12 @@ export default function UpdateData(){
         <>
         <Button 
             title="Get Latest Reading"
-            onPress={() => getLatestHRV(reqData => postReading(reqData))}
+            onPress={() => {
+                getLatestHRV(reqData => postReading(reqData))
+                getLatestRHR(reqData => postRHRReading(reqData))
+            }}
         />
-        <Text>{latestReading}</Text>
+       { (latestReading) ? <Text>rMSSD: {latestReading}ms</Text> : <></>}
         <Button 
             title="Get All HRV Readings!"
             onPress={() => getHRVSince(reqData => postReading(reqData))}

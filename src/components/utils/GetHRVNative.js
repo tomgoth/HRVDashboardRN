@@ -40,3 +40,15 @@ export function getLatestHRV(callback) {
     )
     NativeModules.HRV.getLatestHRV()
 }
+
+export function getLatestRHR(callback) {
+    emitter.removeAllListeners('OnRHRComplete')
+    emitter.addListener(
+        'OnRHRComplete',
+        res => {
+            console.log(res)
+            callback(JSON.parse(res.rhrData))
+        }
+    )
+    NativeModules.HRV.getLatestRHR()
+}
