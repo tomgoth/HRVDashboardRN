@@ -87,6 +87,7 @@ target 'HRVDashboardRN' do
   end
 
   use_native_modules!
+  
 
   # Enables Flipper.
   #

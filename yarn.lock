@@ -5649,6 +5649,11 @@ react-native-dotenv@^0.2.0:
   dependencies:
     babel-plugin-dotenv "0.1.1"
 
+react-native-siri-shortcut@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/react-native-siri-shortcut/-/react-native-siri-shortcut-1.7.0.tgz#f90ebd1799ac60512c1c3bf3797602529d166bff"
+  integrity sha512-5fbgitrJEM6gxGw1bbEmQPnpS0E80Qo20bYSGXkdQh9TBOdxeNN/2Y7y0v9o/roRdewMzM71VvMbpOt35joPYA==
+
 react-native-svg@^12.1.0:
   version "12.1.0"
   resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-12.1.0.tgz#acfe48c35cd5fca3d5fd767abae0560c36cfc03d"

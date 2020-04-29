@@ -5,6 +5,8 @@ import { REACT_APP_BACKEND_URI } from 'react-native-dotenv'
 import { ProgressChart } from 'react-native-chart-kit'
 import Spinner from './Spinner'
 import ReadinessCard from './ReadinessCard'
+import {getHRVSince, getLatestHRV, getRHRSince, getLatestRHR } from './utils/GetHRVNative'
+
 
 
 
@@ -26,17 +28,14 @@ function ReadinessChart() {
         backgroundGradientFrom: '#29335C',
         // backgroundGradientTo: '#CFFCFF',
         color: (opacity = 1, i) => {
-            console.log('index of readiness data', readinessData.data[i])
+            //change color based on percentile
             if (readinessData.data[i] < .33) return `rgba(${254}, ${74}, ${73}, ${opacity})`
             else if (readinessData.data[i] >= .33 && readinessData.data[i] < .66) return `rgba(${243}, ${222}, ${44}, ${opacity})`
             else return `rgba(${116}, ${195}, ${101}, ${opacity})`
-            //return `rgba(${200}, ${255}, ${255}, ${opacity})`
-        },
-
-
+        }
     }
 
-    useEffect(() => {
+    const fetchChartData = () => {
         axios.get(`${REACT_APP_BACKEND_URI}/readiness`)
             .then((res) => {
                 console.log(res.data)
@@ -51,6 +50,12 @@ function ReadinessChart() {
                 setIsLoading(false)
             })
             .catch((err) => { console.log(err) })
+    }
+
+    useEffect(() => {
+        // get the latest info
+        getLatestHRV(fetchChartData)
+        getLatestRHR(fetchChartData)
 
     }, [])
 

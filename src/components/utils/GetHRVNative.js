@@ -1,28 +1,29 @@
 import { NativeEventEmitter, NativeModules } from 'react-native';
+import axios from 'axios';
+import {REACT_APP_BACKEND_URI} from 'react-native-dotenv'
+
 
 const emitter = new NativeEventEmitter(NativeModules.HRV)
 
-
-
-export function getHRVSince(callback) {
+export function getHRVSince() {
     emitter.removeAllListeners('OnHRVComplete')
     emitter.addListener(
         'OnHRVComplete',
         res => {
             console.log(res)
-            callback(JSON.parse(res.beatData))
+            postReading(JSON.parse(res.beatData))
         }
     )
     NativeModules.HRV.getHRVSince()
 }
 
-export function getRHRSince(callback) {
+export function getRHRSince() {
     emitter.removeAllListeners('OnRHRComplete')
     emitter.addListener(
         'OnRHRComplete',
         res => {
             console.log(res)
-            callback(JSON.parse(res.rhrData))
+            postRHRReading(JSON.parse(res.rhrData))
         }
     )
     NativeModules.HRV.getRHRSince()
@@ -35,7 +36,8 @@ export function getLatestHRV(callback) {
         'OnHRVComplete',
         res => {
             console.log(res)
-            callback(JSON.parse(res.beatData))
+            postReading(JSON.parse(res.beatData))
+            callback()
         }
     )
     NativeModules.HRV.getLatestHRV()
@@ -47,8 +49,21 @@ export function getLatestRHR(callback) {
         'OnRHRComplete',
         res => {
             console.log(res)
-            callback(JSON.parse(res.rhrData))
+            postRHRReading(JSON.parse(res.rhrData))
+            callback()
         }
     )
     NativeModules.HRV.getLatestRHR()
+}
+
+const postReading = (reqData) => {
+    axios.post(`${REACT_APP_BACKEND_URI}/hrv`, reqData)
+        .then(res => console.log(res))
+        .catch(err => console.log(err))
+}
+
+const postRHRReading = (reqData) => {
+    axios.post(`${REACT_APP_BACKEND_URI}/rhr`, reqData)
+        .then(res => console.log(res))
+        .catch(err => console.log(err))
 }
