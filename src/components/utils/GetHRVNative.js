@@ -1,6 +1,6 @@
 import { NativeEventEmitter, NativeModules } from 'react-native';
 import axios from 'axios';
-import {REACT_APP_BACKEND_URI} from 'react-native-dotenv'
+import { REACT_APP_BACKEND_URI } from 'react-native-dotenv'
 
 
 const emitter = new NativeEventEmitter(NativeModules.HRV)
@@ -36,8 +36,7 @@ export function getLatestHRV(callback) {
         'OnHRVComplete',
         res => {
             console.log(res)
-            postReading(JSON.parse(res.beatData))
-            callback()
+            postReading(JSON.parse(res.beatData), callback)
         }
     )
     NativeModules.HRV.getLatestHRV()
@@ -49,21 +48,21 @@ export function getLatestRHR(callback) {
         'OnRHRComplete',
         res => {
             console.log(res)
-            postRHRReading(JSON.parse(res.rhrData))
-            callback()
+            postRHRReading(JSON.parse(res.rhrData), callback)
+
         }
     )
     NativeModules.HRV.getLatestRHR()
 }
 
-const postReading = (reqData) => {
+const postReading = (reqData, callback) => {
     axios.post(`${REACT_APP_BACKEND_URI}/hrv`, reqData)
-        .then(res => console.log(res))
+        .then(res => callback())
         .catch(err => console.log(err))
 }
 
-const postRHRReading = (reqData) => {
+const postRHRReading = (reqData, callback) => {
     axios.post(`${REACT_APP_BACKEND_URI}/rhr`, reqData)
-        .then(res => console.log(res))
+        .then(res => callback())
         .catch(err => console.log(err))
 }

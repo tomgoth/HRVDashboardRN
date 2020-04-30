@@ -53,7 +53,7 @@ function ReadinessChart() {
     }
 
     useEffect(() => {
-        // get the latest info
+        // get the latest info , pass chart reload callback
         getLatestHRV(fetchChartData)
         getLatestRHR(fetchChartData)
 
