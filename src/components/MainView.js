@@ -11,7 +11,7 @@ export default function MainView() {
         <SafeAreaView style={styles.container}>
             <ScrollView>
                 <ReadinessChart />
-                <RMSSDChart />
+                {/* <RMSSDChart /> */}
                 <UpdateData />
             </ScrollView>
         </SafeAreaView>
