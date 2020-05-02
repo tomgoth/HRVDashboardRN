@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-
+import ReadinessState from './src/context/ReadinessState'
 import MainView from './src/components/MainView.js';
 
-export default class App extends Component {
-	render() {
-		return <MainView />;
-	}
+export default function App() {
+	return (
+		<ReadinessState>
+			<MainView />
+		</ReadinessState>
+	)
 }
