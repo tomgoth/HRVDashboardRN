@@ -5,54 +5,56 @@ import { REACT_APP_BACKEND_URI } from 'react-native-dotenv'
 
 const emitter = new NativeEventEmitter(NativeModules.HRV)
 
-export function getHRVSince() {
+export function getHRVSince(callback) {
+    emptyResults(callback)
     emitter.removeAllListeners('OnHRVComplete')
     emitter.addListener(
         'OnHRVComplete',
         res => {
-            console.log(res)
-            postReading(JSON.parse(res.beatData))
+            postReading(JSON.parse(res.beatData), callback)
         }
     )
     NativeModules.HRV.getHRVSince()
 }
 
-export function getRHRSince() {
+export function getRHRSince(callback) {
+    emptyResults(callback)
     emitter.removeAllListeners('OnRHRComplete')
     emitter.addListener(
         'OnRHRComplete',
         res => {
-            console.log(res)
-            postRHRReading(JSON.parse(res.rhrData))
+            postRHRReading(JSON.parse(res.rhrData), callback)
         }
     )
     NativeModules.HRV.getRHRSince()
 }
 
 
-export function getLatestHRV(callback) {
+export async function getLatestHRV(callback) {
+    emptyResults(callback)
     emitter.removeAllListeners('OnHRVComplete')
     emitter.addListener(
         'OnHRVComplete',
         res => {
-            console.log(res)
             postReading(JSON.parse(res.beatData), callback)
         }
     )
-    NativeModules.HRV.getLatestHRV()
+    let mostRecent = await axios.get(`${REACT_APP_BACKEND_URI}/hrv/mostrecent`)
+    NativeModules.HRV.getLatestHRV(mostRecent.data.createdAt)
 }
 
-export function getLatestRHR(callback) {
+export async function getLatestRHR(callback) {
+    emptyResults(callback)
     emitter.removeAllListeners('OnRHRComplete')
     emitter.addListener(
         'OnRHRComplete',
         res => {
-            console.log(res)
             postRHRReading(JSON.parse(res.rhrData), callback)
 
         }
     )
-    NativeModules.HRV.getLatestRHR()
+    let mostRecent = await axios.get(`${REACT_APP_BACKEND_URI}/rhr/mostrecent`)
+    NativeModules.HRV.getLatestRHR(mostRecent.data.createdAt)
 }
 
 const postReading = (reqData, callback) => {
@@ -65,4 +67,12 @@ const postRHRReading = (reqData, callback) => {
     axios.post(`${REACT_APP_BACKEND_URI}/rhr`, reqData)
         .then(res => callback())
         .catch(err => console.log(err))
+}
+
+const emptyResults = (callback) => {
+    emitter.removeAllListeners('NoResults')
+    emitter.addListener(
+        'NoResults',
+        res => callback()
+    )
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react'
-import { Dimensions, Button } from 'react-native'
+import { Dimensions, Button, View } from 'react-native'
 import { ProgressChart } from 'react-native-chart-kit'
 import ReadinessCard from './ReadinessCard'
 import ReadinessContext from '../context/ReadinessContext'
@@ -46,12 +46,20 @@ function ReadinessChart() {
    
     return (
         <>
+            <View style={
+                {
+                    flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'center'
+                }
+            }>
             {domainOptions.map(option =>
-                <Button
-                    title={option.displayName}
-                    onPress={() => handleDomainOption(option.value)}
-                    key={option.value}
-                />)}
+                        <Button
+                            title={option.displayName}
+                            onPress={() => handleDomainOption(option.value)}
+                            key={option.value}
+                        />)}
+            </View>
             <ProgressChart
                 data={readinessData}
                 width={width}
@@ -59,7 +67,7 @@ function ReadinessChart() {
                 chartConfig={chartConfig}
                 hideLegend={true}
             />
-            {data.map(item => <ReadinessCard props={item} key={item.id} />)}
+            {data.map(item => <ReadinessCard item={item} key={item.id} />)}
         </>
     )
 }

@@ -13,29 +13,40 @@ import HealthKit
 class HRV: RCTEventEmitter {
   
   @objc
-  func getLatestHRV() {
-    getMostRecentHRVSeriesSample()
+  func getLatestHRV(_ dateStr: NSString) {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+    var startdate = Date.distantPast
+    if let date = formatter.date(from: dateStr as String) {
+      startdate = date.addingTimeInterval(1)
+    }
+    getMostRecentHRSeriesSamples(limit: 100, startDate: startdate)
   }
   
   @objc
   func getHRVSince() {
-    //TODO: add HRV since date parameter
-    getMostRecentHRSeriesSamples()
+    getMostRecentHRSeriesSamples(limit: 5000, startDate: Date.distantPast)
   }
   
   @objc
-  func getLatestRHR() {
-    getMostRecentRHRs(limit: 1)
+  func getLatestRHR(_ dateStr: NSString) {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+    var startdate = Date.distantPast
+    if let date = formatter.date(from: dateStr as String) {
+        startdate = date.addingTimeInterval(1)
+    }
+    getMostRecentRHRs(limit: 100, startDate: startdate)
   }
   
   @objc
   func getRHRSince() {
-    getMostRecentRHRs(limit: 5000)
+    getMostRecentRHRs(limit: 5000, startDate: Date.distantPast)
   }
   
   @objc
-  func getMostRecentHRSeriesSamples() {
-          getHRSeriesSamples() { (samples, error) in
+  func getMostRecentHRSeriesSamples(limit: Int, startDate: Date) {
+    getHRSeriesSamples(limit: limit, startDate: startDate) { (samples, error) in
               
               guard let samples = samples else {
                   
@@ -45,7 +56,9 @@ class HRV: RCTEventEmitter {
                   
                   return
               }
-              
+              if (samples.count < 1) {
+                self.sendEvent(withName: "NoResults", body: [])
+              }
               for sample in samples {
                   print(sample)
                 self.getBeatToBeatMeasurments(seriesSample: sample)
@@ -56,18 +69,16 @@ class HRV: RCTEventEmitter {
   }
   
   @objc
-  func getHRSeriesSamples(completion: @escaping ([HKHeartbeatSeriesSample]?, Error?) -> Swift.Void) {
+  func getHRSeriesSamples(limit: Int, startDate: Date, completion: @escaping ([HKHeartbeatSeriesSample]?, Error?) -> Swift.Void) {
       
       //1. Use HKQuery to load the most recent samples.
 
-      let mostRecentPredicate = HKQuery.predicateForSamples(withStart: Date.distantPast,
+      let mostRecentPredicate = HKQuery.predicateForSamples(withStart: startDate,
                                                             end: Date(),
                                                             options: .strictEndDate)
       
       let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate,
                                             ascending: false)
-      //TODO: parameterize
-      let limit = 5000
       
       let sampleQuery = HKSampleQuery(sampleType: HKSeriesType.heartbeat(),
                                       predicate: mostRecentPredicate,
@@ -91,54 +102,6 @@ class HRV: RCTEventEmitter {
       HKHealthStore().execute(sampleQuery)
   }
   
-  @objc
-  func getMostRecentHRVSeriesSample() {
-      
-      self.getMostRecentHRSeriesSample() { (sample, error) in
-      guard let sample = sample else {
-          if let error = error {
-              print(error.localizedDescription)
-           }
-              return
-          }
-        self.getBeatToBeatMeasurments(seriesSample: sample)
-      }
-  }
-  
-  @objc
-  func getMostRecentHRSeriesSample(completion: @escaping (HKHeartbeatSeriesSample?, Error?) -> Swift.Void) {
-      
-      //1. Use HKQuery to load the most recent samples.
-      let mostRecentPredicate = HKQuery.predicateForSamples(withStart: Date.distantPast,
-                                                            end: Date(),
-                                                            options: .strictEndDate)
-      
-      let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate,
-                                            ascending: false)
-      
-      let limit = 1
-      
-      let sampleQuery = HKSampleQuery(sampleType: HKSeriesType.heartbeat(),
-                                      predicate: mostRecentPredicate,
-                                      limit: limit,
-                                      sortDescriptors: [sortDescriptor]) { (query, samples, error) in
-                                          
-                                          //2. Always dispatch to the main thread when complete.
-                                          DispatchQueue.main.async {
-                                              
-                                              guard let samples = samples,
-                                                  let mostRecentSample = samples.first as? HKHeartbeatSeriesSample else {
-                                                      
-                                                      completion(nil, error)
-                                                      return
-                                              }
-                                              
-                                              completion(mostRecentSample, nil)
-                                            
-                                          }
-      }
-      HKHealthStore().execute(sampleQuery)
-  }
   
   @objc
   func getBeatToBeatMeasurments(seriesSample: HKHeartbeatSeriesSample)  {
@@ -168,7 +131,7 @@ class HRV: RCTEventEmitter {
       semaphore.wait() // wait for query to finish
       
       let parameters = "{\"beatToBeat\": [\(postParams.dropLast())],\"date\":\"\(endDate)\"}" //remove last , and add brackets for JSON array
-      print("parameters", parameters)
+//      print("parameters", parameters)
       
       sendEvent(withName: "OnHRVComplete", body: ["beatData": parameters]) //send each reading beat data to react native app
   }
@@ -220,13 +183,13 @@ class HRV: RCTEventEmitter {
   }
   
   @objc
-  func getMostRecentRHRs(limit: Int) {
+  func getMostRecentRHRs(limit: Int, startDate: Date) {
       guard let sampleType = HKSampleType.quantityType(forIdentifier: .restingHeartRate) else {
           print("HR Sample Type is no longer available in HealthKit")
           return
       }
       
-    self.getSamples(for: sampleType, limit: limit) { (samples, error) in
+    self.getSamples(for: sampleType, limit: limit, startDate: startDate) { (samples, error) in
           
           guard let samples = samples else {
               
@@ -236,34 +199,35 @@ class HRV: RCTEventEmitter {
               
               return
           }
+      
+      if (samples.count < 1) {
+        self.sendEvent(withName: "NoResults", body: [])
+      }
           
           for sample in samples {
-            print (sample.quantity)
               let heartRateSample = sample.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute()))
               let timestamp = sample.endDate
               let sampleJson = "{\"heartrate\":\(heartRateSample),\"timestamp\":\"\(timestamp)\"}"
             self.sendEvent(withName: "OnRHRComplete", body: ["rhrData": sampleJson]) //send each reading beat data to react native app
 
-              //print("RHR sample: \(heartRateSample), Timestamp: \(timestamp)")
+              
           }
           
       }
   }
   
   @objc
-  func getSamples(for sampleType: HKSampleType, limit: Int,
+  func getSamples(for sampleType: HKSampleType, limit: Int, startDate: Date,
                             completion: @escaping ([HKQuantitySample]?, Error?) -> Swift.Void) {
       
       //1. Use HKQuery to load the most recent samples.
-      let mostRecentPredicate = HKQuery.predicateForSamples(withStart: Date.distantPast,
+      let mostRecentPredicate = HKQuery.predicateForSamples(withStart: startDate,
                                                             end: Date(),
                                                             options: .strictEndDate)
       
       let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate,
                                             ascending: false)
-      
-//      let limit = 5000
-      
+            
       let sampleQuery = HKSampleQuery(sampleType: sampleType,
                                       predicate: mostRecentPredicate,
                                       limit: limit,
@@ -294,7 +258,7 @@ class HRV: RCTEventEmitter {
    // Returns an array of your named events
    @objc
    override func supportedEvents() -> [String]! {
-     return ["OnHRVComplete", "OnRHRComplete"]
+     return ["OnHRVComplete", "OnRHRComplete", "NoResults"]
    }
   
 }
