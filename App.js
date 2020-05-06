@@ -1,11 +1,20 @@
-import React, { Component } from 'react';
+import 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
+import React from 'react';
 import ReadinessState from './src/context/ReadinessState'
-import MainView from './src/components/MainView.js';
+import AuthState from './src/context/auth/AuthState';
+import WrapperMain from './src/components/WrapperMain';
+
 
 export default function App() {
+	
 	return (
-		<ReadinessState>
-			<MainView />
-		</ReadinessState>
+		<NavigationContainer>
+			<AuthState>
+				<ReadinessState>
+					<WrapperMain/>
+				</ReadinessState>
+			</AuthState>
+		</NavigationContainer>
 	)
 }
