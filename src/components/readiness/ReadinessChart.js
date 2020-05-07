@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from 'react'
 import { Dimensions, Button, View } from 'react-native'
 import { ProgressChart } from 'react-native-chart-kit'
 import ReadinessCard from './ReadinessCard'
-import ReadinessContext from '../context/ReadinessContext'
+import ReadinessContext from '../../context/readiness/ReadinessContext'
 
 function ReadinessChart() {
     const readinessContext = useContext(ReadinessContext)

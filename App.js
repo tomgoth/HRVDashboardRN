@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
-import ReadinessState from './src/context/ReadinessState'
+import ReadinessState from './src/context/readiness/ReadinessState'
 import AuthState from './src/context/auth/AuthState';
 import WrapperMain from './src/components/WrapperMain';
 

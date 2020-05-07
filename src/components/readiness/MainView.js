@@ -1,10 +1,10 @@
 import React, {  useEffect, useCallback, useContext } from 'react'
 import { StyleSheet, SafeAreaView, ScrollView, RefreshControl, AppState } from 'react-native'
 // import RMSSDChart from './RMSSDChart'
-import UpdateData from './UpdateData'
+import UpdateData from '../import/UpdateData'
 import ReadinessChart from './ReadinessChart'
-import ReadinessContext from '../context/ReadinessContext'
-import Logout from './Logout'
+import ReadinessContext from '../../context/readiness/ReadinessContext'
+import Logout from '../auth/Logout'
 
 
 export default function MainView() {

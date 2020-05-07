@@ -1,14 +1,14 @@
 import React, { useReducer } from 'react';
 import axios from 'axios'
 import { REACT_APP_BACKEND_URI } from 'react-native-dotenv'
-import { getHRVSince, getLatestHRV, getRHRSince, getLatestRHR } from '../components/utils/GetHRVNative'
+import { getHRVSince, getLatestHRV, getRHRSince, getLatestRHR } from '../../components/utils/GetHRVNative'
 import ReadinessContext from './ReadinessContext';
 import ReadinessReducer from './ReadinessReducer';
 import {
     SET_READINESS,
     SET_LOADING,
     SET_DOMAIN
-} from './types'
+} from '../types'
 
 
 const ReadinessState = props => {

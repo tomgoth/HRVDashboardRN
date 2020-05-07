@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { View, Button, Text, TextInput, StyleSheet, Alert } from 'react-native'
 // import AlertContext from '../context/alert/alertContext';
-import AuthContext from '../context/auth/authContext';
+import AuthContext from '../../context/auth/authContext'
 
 
 const Register = (props) => {

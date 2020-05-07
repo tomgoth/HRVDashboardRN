@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { View, Button, Text, TextInput, StyleSheet, Alert } from 'react-native'
-import AuthContext from '../context/auth/authContext';
+import AuthContext from '../../context/auth/authContext';
+
 
 const Login = ({ navigation }) => {
     const authContext = useContext(AuthContext)
@@ -30,7 +31,6 @@ const Login = ({ navigation }) => {
 
     const submit = () => {
         if (email === '' || password === '') {
-            setAlert('Please fill in all fields', 'danger')
             Alert.alert(
                 "Error",
                 'Please fill in all fields',

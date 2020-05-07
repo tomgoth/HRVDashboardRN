@@ -2,7 +2,7 @@ import {
     SET_READINESS,
     SET_LOADING,
     SET_DOMAIN
-} from './types'
+} from '../types'
 
 export default (state, action) => {
     switch (action.type) {
