@@ -4,6 +4,7 @@ import { StyleSheet, SafeAreaView, ScrollView, RefreshControl, AppState } from '
 import UpdateData from './UpdateData'
 import ReadinessChart from './ReadinessChart'
 import ReadinessContext from '../context/ReadinessContext'
+import Logout from './Logout'
 
 
 export default function MainView() {
@@ -39,6 +40,7 @@ export default function MainView() {
                 <ReadinessChart />
                 {/* <RMSSDChart /> */}
                 <UpdateData />
+                <Logout />
             </ScrollView>
         </SafeAreaView>
     )

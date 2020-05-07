@@ -9,6 +9,8 @@ NativeModules.HRV.authorizeHealthKit()
 
 
 export default function UpdateData(){
+
+    const [rhrReadingCount, setRhrReadingCount] = useState(0)
     
 
     return (
@@ -20,9 +22,9 @@ export default function UpdateData(){
         />
         <Button 
             title="Get All RHR!"
-            onPress={() => getRHRSince()}
+            onPress={() => getRHRSince(() => setRhrReadingCount(rhrReadingCount + 1))}
         />
-        
+            {(rhrReadingCount > 0) ? <Text>RHR Imported: {rhrReadingCount}</Text> : <></>}
         </>
     )
 }

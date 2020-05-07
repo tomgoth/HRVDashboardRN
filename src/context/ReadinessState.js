@@ -26,7 +26,6 @@ const ReadinessState = props => {
         setIsLoading(true)
         axios.get(`${REACT_APP_BACKEND_URI}/api/readings/readiness/${state.domain}/hour`)
             .then((res) => {
-                console.log(res.data)
                 dispatch({
                     type: SET_READINESS,
                     payload: res.data

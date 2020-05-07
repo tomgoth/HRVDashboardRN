@@ -39,8 +39,13 @@ export async function getLatestHRV(callback) {
             postReading(JSON.parse(res.beatData), callback)
         }
     )
-    let mostRecent = await axios.get(`${REACT_APP_BACKEND_URI}/api/readings/hrv/mostrecent`)
-    NativeModules.HRV.getLatestHRV(mostRecent.data.createdAt)
+    try {
+        let mostRecent = await axios.get(`${REACT_APP_BACKEND_URI}/api/readings/hrv/mostrecent`)
+        NativeModules.HRV.getLatestHRV(mostRecent.data.createdAt)
+    }
+    catch (e) {
+        console.log(e)
+    }
 }
 
 export async function getLatestRHR(callback) {
@@ -53,8 +58,14 @@ export async function getLatestRHR(callback) {
 
         }
     )
-    let mostRecent = await axios.get(`${REACT_APP_BACKEND_URI}/api/readings/rhr/mostrecent`)
-    NativeModules.HRV.getLatestRHR(mostRecent.data.createdAt)
+    try {
+        let mostRecent = await axios.get(`${REACT_APP_BACKEND_URI}/api/readings/rhr/mostrecent`)
+        NativeModules.HRV.getLatestRHR(mostRecent.data.createdAt)
+    }
+    catch (e) {
+        console.log(e)
+    }
+
 }
 
 const postReading = (reqData, callback) => {

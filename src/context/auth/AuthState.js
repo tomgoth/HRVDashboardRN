@@ -15,7 +15,8 @@ import {
     LOGIN_SUCCESS,
     LOGIN_FAIL,
     LOGOUT,
-    CLEAR_ERRORS
+    CLEAR_ERRORS,
+    SET_TOKEN
 } from '../types'
 
 const AuthState = props => {
@@ -120,7 +121,13 @@ const AuthState = props => {
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = () => {
         deviceStorage.loadJWT()
-            .then(value => loadUser(value.token))
+            .then(value => {
+                dispatch({
+                    type: SET_TOKEN,
+                    payload: value.token
+                })
+                loadUser(value.token)
+            })
             .catch(err => console.log(err))
     };
 

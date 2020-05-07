@@ -6,7 +6,8 @@ import {
     LOGIN_SUCCESS,
     LOGIN_FAIL,
     LOGOUT,
-    CLEAR_ERRORS
+    CLEAR_ERRORS,
+    SET_TOKEN
 } from '../types'
 import deviceStorage from '../../utils/deviceStorage'
 
@@ -47,6 +48,11 @@ export default (state, action) => {
                 isAuthenticated: true,
                 loading: false,
                 user: action.payload
+            }
+        case SET_TOKEN:
+            return {
+                ...state,
+                token: action.payload
             }
         default:
             return state

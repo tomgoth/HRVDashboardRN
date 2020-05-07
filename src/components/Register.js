@@ -10,7 +10,6 @@ const Register = (props) => {
     const { register, error, clearErrors, isAuthenticated } = authContext
 
     useEffect(() => {
-        
         //if a bigger app i would use an id for the error
         if (error === 'User already exists') {
             // setAlert(error, 'danger')
@@ -93,7 +92,7 @@ const Register = (props) => {
             />
             <Button
                 style={styles.button}
-                title='Submit'
+                title='Register'
                 onPress={() => submit()}
             />
         </View>
