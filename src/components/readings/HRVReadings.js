@@ -12,10 +12,11 @@ function HRVReadings() {
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        console.log("readings UE")
         axios.get(`${REACT_APP_BACKEND_URI}/api/readings/hrv`)
             .then(res => {
-                setReadings(res.data.data)
+                setReadings(res.data.data.map(reading => {
+                    return {...reading, readinessData: {data: [reading.hfpwrPercentile, reading.rMSSDPercentile, reading.sdnnPercentile]}}
+                }))
                 setIsLoading(false)
             })
             .catch(err => console.log(err))
