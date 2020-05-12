@@ -128,7 +128,13 @@ const AuthState = props => {
                 })
                 loadUser(value.token)
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                console.log(err)
+                dispatch({
+                    type: LOGIN_FAIL,
+                    payload: err
+                })
+            })
     };
 
 

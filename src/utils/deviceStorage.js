@@ -24,7 +24,7 @@ const deviceStorage = {
                 resolve(tokenObj)
             }
             else{
-                reject("no results")
+                reject("no token results")
             }
 
         }

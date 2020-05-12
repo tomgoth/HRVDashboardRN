@@ -67,7 +67,7 @@ function ReadinessChart() {
                 chartConfig={chartConfig}
                 hideLegend={true}
             />
-            {data.map(item => <ReadinessCard item={item} key={item.id} />)}
+            {data.map(item => <ReadinessCard item={item} key={item.id} domain={domain}/>)}
         </>
     )
 }

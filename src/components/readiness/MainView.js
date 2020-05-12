@@ -1,13 +1,13 @@
 import React, {  useEffect, useCallback, useContext } from 'react'
 import { StyleSheet, SafeAreaView, ScrollView, RefreshControl, AppState } from 'react-native'
-// import RMSSDChart from './RMSSDChart'
-import UpdateData from '../import/UpdateData'
 import ReadinessChart from './ReadinessChart'
 import ReadinessContext from '../../context/readiness/ReadinessContext'
 import Logout from '../auth/Logout'
+import HRVReadingsButton from '../readings/HRVReadingsButton'
+import ImportButton from '../import/ImportButton'
 
 
-export default function MainView() {
+export default function MainView({ navigation }) {
 
     useEffect(() => {
         AppState.addEventListener('change', handleChange);  
@@ -38,8 +38,8 @@ export default function MainView() {
                 <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
             }>
                 <ReadinessChart />
-                {/* <RMSSDChart /> */}
-                <UpdateData />
+                <HRVReadingsButton navigation={navigation}/>
+                <ImportButton navigation={navigation} />
                 <Logout />
             </ScrollView>
         </SafeAreaView>

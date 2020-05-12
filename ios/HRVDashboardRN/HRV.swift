@@ -59,6 +59,7 @@ class HRV: RCTEventEmitter {
               if (samples.count < 1) {
                 self.sendEvent(withName: "NoResults", body: [])
               }
+              self.sendEvent(withName: "ResultCount", body:["resultCount": samples.count])
               for sample in samples {
                   print(sample)
                 self.getBeatToBeatMeasurments(seriesSample: sample)
@@ -203,6 +204,7 @@ class HRV: RCTEventEmitter {
       if (samples.count < 1) {
         self.sendEvent(withName: "NoResults", body: [])
       }
+      self.sendEvent(withName: "ResultCount", body:["resultCount": samples.count])
           
           for sample in samples {
               let heartRateSample = sample.quantity.doubleValue(for: HKUnit.count().unitDivided(by: HKUnit.minute()))
@@ -258,7 +260,7 @@ class HRV: RCTEventEmitter {
    // Returns an array of your named events
    @objc
    override func supportedEvents() -> [String]! {
-     return ["OnHRVComplete", "OnRHRComplete", "NoResults"]
+     return ["OnHRVComplete", "OnRHRComplete", "NoResults", "ResultCount"]
    }
   
 }

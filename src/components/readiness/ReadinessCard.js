@@ -6,6 +6,7 @@ import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 export default function ReadinessCard(props) {
     const { percentile, label, currentValue, createdAt } = props.item
+    const { domain } = props
     return (
         <>
             <Text>{`${label}:`}</Text>
@@ -28,7 +29,9 @@ export default function ReadinessCard(props) {
                     )
                 }
             </AnimatedCircularProgress>
-            <Text>{`${moment(createdAt).fromNow()}`}</Text>
+            {(domain === 0) ? 
+            <Text>{`${moment(createdAt).fromNow()}`}</Text> :
+            <Text>{`${domain} hour average`}</Text>}
             <Text></Text>
         </>
     )
