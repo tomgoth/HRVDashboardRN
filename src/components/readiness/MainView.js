@@ -39,7 +39,7 @@ export default function MainView({ navigation }) {
             }>
                 <ReadinessChart />
                 <HRVReadingsButton navigation={navigation}/>
-                <ImportButton navigation={navigation} />
+                {/* <ImportButton navigation={navigation} /> */}
                 <Logout />
             </ScrollView>
         </SafeAreaView>

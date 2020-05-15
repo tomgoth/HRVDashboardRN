@@ -36,8 +36,10 @@ const ReadinessState = props => {
 
     const getLatestReadings = () => {
         setIsLoading(true)
-        getLatestHRV(setReadinessData)
-        getLatestRHR(setReadinessData)
+        getLatestHRV(() => {
+            getLatestRHR(setReadinessData)
+        })
+        
     }
 
     const setDomain = (option) => {

@@ -1,36 +1,100 @@
-import React, { useEffect, useState } from 'react'
-import { ScrollView } from 'react-native'
+import React, { useEffect, useState, useCallback } from 'react'
+import { FlatList, View, ActivityIndicator, Dimensions } from 'react-native'
 import { REACT_APP_BACKEND_URI } from 'react-native-dotenv'
 import HRVReadingCard from './HRVReadingCard'
 import axios from 'axios'
-import Spinner from '../utils/Spinner'
+import { getLatestHRV } from '../../components/utils/GetHRVNative'
 
 
 function HRVReadings() {
 
     const [readings, setReadings] = useState([])
-    const [isLoading, setIsLoading] = useState(true)
+    const [page, setPage] = useState(1) //page index
+    const [size, setSize] = useState(5) //page size
+    const [loadingMore, setLoadingMore] = useState(false) //infinite scroll loading 
+    const [refreshing, setRefreshing] = useState(true) // pull to refresh loading
+    const [onEndReachedCalledDuringMomentum, setOnEndReachedCalledDuringMomentum] = useState(false) //load only 1x per scroll movement
+
+    const {height} = Dimensions.get('window');
+
 
     useEffect(() => {
-        axios.get(`${REACT_APP_BACKEND_URI}/api/readings/hrv`)
-            .then(res => {
-                setReadings(res.data.data.map(reading => {
-                    return {...reading, readinessData: {data: [reading.hfpwrPercentile, reading.rMSSDPercentile, reading.sdnnPercentile]}}
-                }))
-                setIsLoading(false)
-            })
-            .catch(err => console.log(err))
-    }, [])
+        fetchReadings()
+    }, [page])
 
-    if (isLoading) {
-        return <Spinner />
+    const fetchReadings = () => {
+        axios.get(`${REACT_APP_BACKEND_URI}/api/readings/hrv/${page}/${size}`)
+            .then(res => {
+                const newReadings = res.data.data.map(reading => {
+                    return { ...reading, readinessData: { data: [reading.hfpwrPercentile, reading.rMSSDPercentile, reading.sdnnPercentile] } }
+                })
+                setReadings(
+                    (page === 1) ? newReadings : [...readings, ...newReadings]
+                )
+
+                setLoadingMore(false)
+                setRefreshing(false)
+            })
+            .catch(err => {
+                console.log(err)
+
+                setLoadingMore(false)
+                setRefreshing(false)
+            })
+    }
+
+    const handleLoadMore = () => {
+        //fire loading only when momentum stops
+        if (!onEndReachedCalledDuringMomentum) {        
+            setPage(page + 1)
+            setLoadingMore(true)
+            setOnEndReachedCalledDuringMomentum(true)
+        }
+    }
+
+    const handleRefresh = useCallback(() => {
+        setRefreshing(true)
+        getLatestHRV(() => { 
+            setPage(1)
+            fetchReadings()
+        })
+    }, [refreshing])
+
+    const renderFooter = () => {
+        if (!loadingMore) return null
+
+        return (
+            <View>
+                <ActivityIndicator animating size="large" />
+            </View>
+        );
     }
 
     return (
-        <ScrollView>
-            {readings.map(r => <HRVReadingCard reading={r} key={r.createdAt} />)}
-        </ScrollView>
+        <View style={{ flex: 1, height: height }}>
+            <FlatList
+                data={readings}
+                keyExtractor={item => item._id}
+                renderItem={({ item }) => (
+                    <View
+                        style={{
+                            marginTop: 25,
+                            width: '100%'
+                        }}
+                    >
+                        <HRVReadingCard reading={item} />
+                    </View>
+                )}
+                onEndReached={handleLoadMore}
+                onEndReachedThreshold={0.1}
+                onMomentumScrollBegin={() => { setOnEndReachedCalledDuringMomentum(false) }}
+                initialNumToRender={size}
+                ListFooterComponent={renderFooter}
+                onRefresh={handleRefresh}
+                refreshing={refreshing}
 
+            />
+        </View>
     )
 }
 

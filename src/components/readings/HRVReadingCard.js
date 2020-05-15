@@ -8,7 +8,7 @@ function HRVReadingCard(props) {
     const { SDNN, rMSSD, HFPWR, LFPWR, LFtoHF, AVNN, TOTPWR, NNtoRR, createdAt, readinessData } = props.reading
     const HR =  (1000 / AVNN) * 60
     const quality = NNtoRR * 100
-    const [width, height] = [100, 100]
+    const [width, height] = [150, 150]
 
     const chartConfig = {
         backgroundColor: '#CFFCFF',
@@ -41,8 +41,8 @@ function HRVReadingCard(props) {
                 height={height}
                 chartConfig={chartConfig}
                 hideLegend={true}
-                strokeWidth={4}
-                radius={8}
+                strokeWidth={8}
+                radius={16}
             />
             <Text></Text>
         
