@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react';
 import axios from 'axios'
 import { REACT_APP_BACKEND_URI } from 'react-native-dotenv'
-import { getHRVSince, getLatestHRV, getRHRSince, getLatestRHR } from '../../components/utils/GetHRVNative'
+import { getLatestHRV, getLatestRHR } from '../../components/utils/GetHRVNative'
 import ReadinessContext from './ReadinessContext';
 import ReadinessReducer from './ReadinessReducer';
 import {
@@ -23,7 +23,6 @@ const ReadinessState = props => {
 
     //ACTIONS
     const setReadinessData = () => {
-        setIsLoading(true)
         axios.get(`${REACT_APP_BACKEND_URI}/api/readings/readiness/${state.domain}/hour`)
             .then((res) => {
                 dispatch({
@@ -35,11 +34,10 @@ const ReadinessState = props => {
     }
 
     const getLatestReadings = () => {
+        if (state.isLoading) return
         setIsLoading(true)
-        getLatestHRV(() => {
-            getLatestRHR(setReadinessData)
-        })
-        
+        getLatestHRV(setReadinessData)
+        getLatestRHR(setReadinessData)
     }
 
     const setDomain = (option) => {

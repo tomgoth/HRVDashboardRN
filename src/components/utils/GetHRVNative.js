@@ -5,6 +5,9 @@ import { REACT_APP_BACKEND_URI } from 'react-native-dotenv'
 
 const emitter = new NativeEventEmitter(NativeModules.HRV)
 
+const HRVResultCount = 0
+const RHRResultCount = 0 
+
 export function getHRVSince(callback) {
     emptyResults(callback)
     emitter.removeAllListeners('OnHRVComplete')
@@ -39,20 +42,19 @@ export async function getLatestHRV(callback) {
             postReading(JSON.parse(res.beatData), callback)
         }
     )
-    let mostRecent
-    try {
-        mostRecent = await axios.get(`${REACT_APP_BACKEND_URI}/api/readings/hrv/mostrecent`)
-        
-    }
-    catch (e) {
-        console.log(e)
-    }
-    if (mostRecent.data) {
-        NativeModules.HRV.getLatestHRV(mostRecent.data.createdAt)
-    }
-    else {
-        NativeModules.HRV.getLatestHRV('')
-    }
+    axios.get(`${REACT_APP_BACKEND_URI}/api/readings/hrv/mostrecent`)
+        .then(mostRecent => {
+            if (mostRecent.data) {
+                NativeModules.HRV.getLatestHRV(mostRecent.data.createdAt)
+            }
+            else {
+                NativeModules.HRV.getLatestHRV('')
+            }
+        })
+        .catch(err => {
+            NativeModules.HRV.getLatestHRV('')
+        })
+    
 }
 
 export async function getLatestRHR(callback) {
@@ -65,21 +67,18 @@ export async function getLatestRHR(callback) {
 
         }
     )
-    let mostRecent
-    try {
-        mostRecent = await axios.get(`${REACT_APP_BACKEND_URI}/api/readings/rhr/mostrecent`)
-        
-    }
-    catch (e) {
-        console.log(e)
-    }
-    if (mostRecent.data) {
-        NativeModules.HRV.getLatestRHR(mostRecent.data.createdAt)
-    }
-    else {
-        NativeModules.HRV.getLatestRHR('')
-    }
-
+    axios.get(`${REACT_APP_BACKEND_URI}/api/readings/rhr/mostrecent`)
+        .then(mostRecent => {
+            if (mostRecent.data){
+                NativeModules.HRV.getLatestRHR(mostRecent.data.createdAt)
+            }
+            else {
+                NativeModules.HRV.getLatestRHR('')
+            }
+        })
+        .catch(err => {
+            NativeModules.HRV.getLatestRHR('')
+        })
 }
 
 const postReading = (reqData, callback) => {
@@ -100,4 +99,27 @@ const emptyResults = (callback) => {
         'NoResults',
         res => callback()
     )
+}
+
+const rhrResultCount = () => {
+
+    emitter.removeAllListeners('RHRResultCount')
+    RHRResultCount = 0
+    emitter.addListener(
+        'RHRResultCount',
+        res => {
+            RHRResultCount += JSON.parse(res.resultCount)
+            console.log('RHR Result Count',RHRResultCount)
+    })
+}
+
+const hrvResultCount = () => {
+    emitter.removeAllListeners('HRVResultCount')
+    HRVResultCount = 0
+    emitter.addListener(
+        'HRVResultCount',
+        res => {
+            HRVResultCount += JSON.parse(res.resultCount)
+            console.log('HRV Result Count',HRVResultCount)
+    })
 }

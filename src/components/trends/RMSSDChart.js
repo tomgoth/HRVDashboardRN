@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, Button} from 'react-native'
 import axios from "axios"
-import { quantile } from './utils/math'
+import { quantile } from '../utils/math'
 import moment from 'moment'
 import { VictoryLine, VictoryChart, VictoryBrushContainer, VictoryTooltip, createContainer, VictoryLegend } from 'victory-native'
 import Spinner from './Spinner.js'
