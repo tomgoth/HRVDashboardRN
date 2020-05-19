@@ -5,6 +5,8 @@ import { REACT_APP_BACKEND_URI } from 'react-native-dotenv'
 
 const emitter = new NativeEventEmitter(NativeModules.HRV)
 
+
+
 const HRVResultCount = 0
 const RHRResultCount = 0 
 
@@ -33,7 +35,7 @@ export function getRHRSince(callback) {
 }
 
 
-export async function getLatestHRV(callback) {
+export async function getLatestHRV(callback, token) {
     emptyResults(callback)
     emitter.removeAllListeners('OnHRVComplete')
     emitter.addListener(
@@ -42,7 +44,14 @@ export async function getLatestHRV(callback) {
             postReading(JSON.parse(res.beatData), callback)
         }
     )
-    axios.get(`${REACT_APP_BACKEND_URI}/api/readings/hrv/mostrecent`)
+    const config = (token) ? {
+        headers: {
+            'Content-Type': 'application/json',
+            'x-auth-token': token
+        } 
+    } : null
+
+    axios.get(`${REACT_APP_BACKEND_URI}/api/readings/hrv/mostrecent`, config)
         .then(mostRecent => {
             if (mostRecent.data) {
                 NativeModules.HRV.getLatestHRV(mostRecent.data.createdAt)
@@ -52,12 +61,13 @@ export async function getLatestHRV(callback) {
             }
         })
         .catch(err => {
-            NativeModules.HRV.getLatestHRV('')
+            //NativeModules.HRV.getLatestHRV('')
+            console.log(err)
         })
     
 }
 
-export async function getLatestRHR(callback) {
+export async function getLatestRHR(callback, token) {
     emptyResults(callback)
     emitter.removeAllListeners('OnRHRComplete')
     emitter.addListener(
@@ -67,7 +77,14 @@ export async function getLatestRHR(callback) {
 
         }
     )
-    axios.get(`${REACT_APP_BACKEND_URI}/api/readings/rhr/mostrecent`)
+    const config = (token) ? {
+        headers: {
+            'Content-Type': 'application/json',
+            'x-auth-token': token
+        } 
+    } : null
+
+    axios.get(`${REACT_APP_BACKEND_URI}/api/readings/rhr/mostrecent`, config)
         .then(mostRecent => {
             if (mostRecent.data){
                 NativeModules.HRV.getLatestRHR(mostRecent.data.createdAt)
@@ -77,7 +94,8 @@ export async function getLatestRHR(callback) {
             }
         })
         .catch(err => {
-            NativeModules.HRV.getLatestRHR('')
+            // NativeModules.HRV.getLatestRHR('')
+            console.log(err)
         })
 }
 

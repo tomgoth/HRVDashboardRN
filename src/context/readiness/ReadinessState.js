@@ -1,9 +1,10 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useContext } from 'react';
 import axios from 'axios'
 import { REACT_APP_BACKEND_URI } from 'react-native-dotenv'
 import { getLatestHRV, getLatestRHR } from '../../components/utils/GetHRVNative'
 import ReadinessContext from './ReadinessContext';
 import ReadinessReducer from './ReadinessReducer';
+import AuthContext from '../auth/authContext'
 import {
     SET_READINESS,
     SET_LOADING,
@@ -20,10 +21,18 @@ const ReadinessState = props => {
     }
 
     const [state, dispatch] = useReducer(ReadinessReducer, initialState)
+    const { token } = useContext(AuthContext)
 
     //ACTIONS
     const setReadinessData = () => {
-        axios.get(`${REACT_APP_BACKEND_URI}/api/readings/readiness/${state.domain}/hour`)
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'x-auth-token': token
+            }
+        }
+
+        axios.get(`${REACT_APP_BACKEND_URI}/api/readings/readiness/${state.domain}/hour`,config)
             .then((res) => {
                 dispatch({
                     type: SET_READINESS,
@@ -34,10 +43,10 @@ const ReadinessState = props => {
     }
 
     const getLatestReadings = () => {
-        if (state.isLoading) return
+        console.log("Get latest readings")
         setIsLoading(true)
-        getLatestHRV(setReadinessData)
-        getLatestRHR(setReadinessData)
+        getLatestHRV(setReadinessData, token)
+        getLatestRHR(setReadinessData, token)
     }
 
     const setDomain = (option) => {

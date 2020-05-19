@@ -2,7 +2,7 @@ import React, { useReducer } from 'react'
 import axios from 'axios'
 import AuthContext from './authContext'
 import authReducer from './authReducer'
-// import setAuthToken from '../../utils/setAuthToken'
+import setAuthToken from '../../utils/setAuthToken'
 // import axiosWithAuth from '../../utils/axiosWithAuth'
 import deviceStorage from '../../utils/deviceStorage'
 import { REACT_APP_BACKEND_URI } from 'react-native-dotenv'
@@ -18,6 +18,7 @@ import {
     CLEAR_ERRORS,
     SET_TOKEN
 } from '../types'
+
 
 const AuthState = props => {
 
@@ -50,6 +51,7 @@ const AuthState = props => {
                     type: USER_LOADED,
                     payload: res.data
                 })
+                setAuthToken(token)
             }
             else {
                 dispatch({ type: AUTH_ERROR })
@@ -130,10 +132,7 @@ const AuthState = props => {
             })
             .catch(err => {
                 console.log(err)
-                dispatch({
-                    type: LOGIN_FAIL,
-                    payload: err
-                })
+                dispatch({ type: LOGOUT })
             })
     };
 

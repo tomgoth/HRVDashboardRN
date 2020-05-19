@@ -2,9 +2,11 @@ import React, {  useEffect, useCallback, useContext } from 'react'
 import { StyleSheet, SafeAreaView, ScrollView, RefreshControl, AppState } from 'react-native'
 import ReadinessChart from './ReadinessChart'
 import ReadinessContext from '../../context/readiness/ReadinessContext'
+import AuthContext from '../../context/auth/authContext'
 import Logout from '../auth/Logout'
 import HRVReadingsButton from '../readings/HRVReadingsButton'
 import ImportButton from '../import/ImportButton'
+import setAuthToken from '../../utils/setAuthToken'
 
 
 export default function MainView({ navigation }) {
@@ -24,12 +26,11 @@ export default function MainView({ navigation }) {
         }
       }
 
-    const readinessContext = useContext(ReadinessContext)
-    const { isLoading, getLatestReadings } = readinessContext
+    const { isLoading, getLatestReadings } = useContext(ReadinessContext)
+    const { token } = useContext(AuthContext)
 
     const onRefresh = useCallback(() => {
         getLatestReadings()
-    
     }, [isLoading]);
 
     return (
