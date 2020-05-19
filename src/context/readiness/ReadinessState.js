@@ -55,6 +55,7 @@ const ReadinessState = props => {
             payload: option
         })
     }
+    
 
     const setIsLoading = (isLoading) => {
         dispatch({
