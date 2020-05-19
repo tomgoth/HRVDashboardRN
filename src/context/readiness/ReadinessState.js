@@ -23,7 +23,6 @@ const ReadinessState = props => {
     const [state, dispatch] = useReducer(ReadinessReducer, initialState)
     const { token } = useContext(AuthContext)
 
-    //ACTIONS
     const setReadinessData = () => {
         const config = {
             headers: {
@@ -55,7 +54,7 @@ const ReadinessState = props => {
             payload: option
         })
     }
-    
+
 
     const setIsLoading = (isLoading) => {
         dispatch({
