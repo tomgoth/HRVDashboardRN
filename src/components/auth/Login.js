@@ -51,6 +51,8 @@ const Login = ({ navigation }) => {
              <Text>Email</Text>
             <TextInput
                 style={styles.textInput}
+                placeholder="sample@email.com"
+                placeholderTextColor='rgba(28,53,63, .25)'
                 keyboardType='email-address'
                 autoCapitalize = 'none'
                 onChangeText={(value) => setUser({ ...user, email: value })}

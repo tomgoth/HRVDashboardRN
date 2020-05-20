@@ -70,12 +70,17 @@ const Register = (props) => {
         <View>
             <Text>Name</Text>
             <TextInput
+                placeholder="Jane Doe"
+                placeholderTextColor='rgba(28,53,63, .25)'
+                autoCapitalize = 'words'
                 style={styles.textInput}
                 onChangeText={(value) => setUser({ ...user, name: value })}
             />
             <Text>Email</Text>
             <TextInput
                 style={styles.textInput}
+                placeholder="janedoe@email.com"
+                placeholderTextColor='rgba(28,53,63, .25)'
                 keyboardType='email-address'
                 autoCapitalize = 'none'
                 onChangeText={(value) => setUser({ ...user, email: value })}
