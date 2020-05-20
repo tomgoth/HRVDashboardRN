@@ -51,6 +51,8 @@ const Login = ({ navigation }) => {
              <Text>Email</Text>
             <TextInput
                 style={styles.textInput}
+                keyboardType='email-address'
+                autoCapitalize = 'none'
                 onChangeText={(value) => setUser({ ...user, email: value })}
             />
             <Text>Password</Text>
