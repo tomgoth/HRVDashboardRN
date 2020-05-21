@@ -41,11 +41,19 @@ const ReadinessState = props => {
             .catch((err) => { console.log(err) })
     }
 
-    const getLatestReadings = () => {
+    const getLatestReadings = async () => {
         console.log("Get latest readings")
         setIsLoading(true)
-        getLatestHRV(setReadinessData, token)
-        getLatestRHR(setReadinessData, token)
+        const [hrvCount, rhrCount] = await Promise.all([
+            getLatestHRV(token),
+            getLatestRHR(token)
+        ])
+
+        console.log("awaited hrv count", hrvCount)
+        console.log("awaited rhr count", rhrCount)
+    
+        setReadinessData()
+
     }
 
     const setDomain = (option) => {

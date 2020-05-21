@@ -54,10 +54,12 @@ function HRVReadings() {
 
     const handleRefresh = useCallback(() => {
         setRefreshing(true)
-        getLatestHRV(() => { 
-            setPage(1)
-            fetchReadings()
-        })
+        getLatestHRV()
+            .then((res) => {
+                setPage(1)
+                fetchReadings()
+            })
+            .catch ((err) => console.log(err))
     }, [refreshing])
 
     const renderFooter = () => {
