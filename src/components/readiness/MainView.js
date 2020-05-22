@@ -26,12 +26,12 @@ export default function MainView({ navigation }) {
         }
       }
 
-    const { isLoading, getLatestReadings } = useContext(ReadinessContext)
+    const { isLoading, getLatestReadings, domain } = useContext(ReadinessContext)
     const { token } = useContext(AuthContext)
 
     const onRefresh = useCallback(() => {
         getLatestReadings()
-    }, [isLoading]);
+    }, [isLoading, domain]);
 
     return (
         <SafeAreaView style={styles.container}>
