@@ -59,7 +59,10 @@ function HRVReadings() {
                 setPage(1)
                 fetchReadings()
             })
-            .catch ((err) => console.log(err))
+            .catch ((err) => {
+                console.log(err)
+                setRefreshing(false)
+            })
     }, [refreshing])
 
     const renderFooter = () => {

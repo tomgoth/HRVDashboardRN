@@ -24,12 +24,13 @@ const ReadinessState = props => {
     const { token } = useContext(AuthContext)
 
     const setReadinessData = () => {
-        const config = {
+        
+        const config = (token) ? {
             headers: {
                 'Content-Type': 'application/json',
                 'x-auth-token': token
             }
-        }
+        } : null
 
         axios.get(`${REACT_APP_BACKEND_URI}/api/readings/readiness/${state.domain}/hour`,config)
             .then((res) => {
@@ -38,22 +39,31 @@ const ReadinessState = props => {
                     payload: res.data
                 })
             })
-            .catch((err) => { console.log(err) })
+            .catch((err) => { 
+                console.log(err)
+                dispatch({
+                    type: SET_LOADING,
+                    payload: false
+                }) 
+            })
     }
 
-    const getLatestReadings = async () => {
+    const getLatestReadings = () => {
         console.log("Get latest readings")
         setIsLoading(true)
-        const [hrvCount, rhrCount] = await Promise.all([
+        Promise.all([
             getLatestHRV(token),
             getLatestRHR(token)
         ])
-
-        console.log("awaited hrv count", hrvCount)
-        console.log("awaited rhr count", rhrCount)
-    
-        setReadinessData()
-
+        .then(values => {
+            const [hrvCount, rhrCount] = values;
+            console.log("awaited hrv count", hrvCount)
+            console.log("awaited rhr count", rhrCount)
+            setReadinessData()
+        })
+        .catch(err => {
+            console.log("get latest readings error", err)
+        })
     }
 
     const setDomain = (option) => {

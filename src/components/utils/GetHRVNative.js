@@ -5,8 +5,6 @@ import { REACT_APP_BACKEND_URI } from 'react-native-dotenv'
 
 const emitter = new NativeEventEmitter(NativeModules.HRV)
 
-
-
 let HRVResultCount = 0
 let HRVPostedCount = 0
 
@@ -46,7 +44,7 @@ export async function getLatestHRV(token) {
         emitter.addListener(
             'OnHRVComplete',
             res => {
-                postReading(JSON.parse(res.beatData), resolve)
+                postReading(JSON.parse(res.beatData), resolve, reject)
             }
         )
         const config = (token) ? {
@@ -66,7 +64,6 @@ export async function getLatestHRV(token) {
                 }
             })
             .catch(err => {
-                //NativeModules.HRV.getLatestHRV('')
                 console.log(err)
                 reject(err)
             })
@@ -81,7 +78,7 @@ export async function getLatestRHR(token) {
         emitter.addListener(
             'OnRHRComplete',
             res => {
-                postRHRReading(JSON.parse(res.rhrData), resolve)
+                postRHRReading(JSON.parse(res.rhrData), resolve, reject)
 
             }
         )
@@ -102,24 +99,26 @@ export async function getLatestRHR(token) {
                 }
             })
             .catch(err => {
-                // NativeModules.HRV.getLatestRHR('')
                 console.log(err)
                 reject(err)
             })
     })
 }
 
-const postReading = (reqData, resolve) => {
+const postReading = (reqData, resolve, reject) => {
     axios.post(`${REACT_APP_BACKEND_URI}/api/readings/hrv`, reqData)
         .then(res => {
             HRVPostedCount++
             console.log('HRV Posted Count', HRVPostedCount)
             if (HRVPostedCount === HRVResultCount) resolve(HRVPostedCount)
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+            console.log(err)
+            reject(err)
+        })
 }
 
-const postRHRReading = (reqData, resolve) => {
+const postRHRReading = (reqData, resolve, reject) => {
     axios.post(`${REACT_APP_BACKEND_URI}/api/readings/rhr`, reqData)
         .then(res => {
             RHRPostedCount++
@@ -127,16 +126,11 @@ const postRHRReading = (reqData, resolve) => {
             if (RHRPostedCount === RHRResultCount) resolve(RHRPostedCount)
         })
 
-        .catch(err => console.log(err))
+        .catch(err => {
+            console.log(err)
+            reject(err)
+        })
 }
-
-// const emptyResults = (resolve) => {
-//     emitter.removeAllListeners('NoResults')
-//     emitter.addListener(
-//         'NoResults',
-//         res => resolve(0)
-//     )
-// }
 
 const rhrResultCount = (resolve) => {
 
