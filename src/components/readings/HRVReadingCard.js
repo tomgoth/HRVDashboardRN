@@ -27,7 +27,7 @@ function HRVReadingCard(props) {
         <>
             
             <Text>{moment(createdAt).format("MMM Do h:mma")}</Text>
-            <Text>SDNN: {SDNN.toFixed(0)} ms</Text>
+            <Text>SDNN: {SDNN.toFixed(0)} ms </Text>
             <Text>rMSSD: {rMSSD.toFixed(0)} ms</Text>
             <Text>Total Power: {TOTPWR.toFixed(0)}</Text>
             <Text>High Frequency (HF) Power: {HFPWR.toFixed(0)}</Text>
