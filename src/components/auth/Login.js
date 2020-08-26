@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Button, Text, TextInput, StyleSheet, Alert, ScrollView } from 'react-native'
+import { View, Button, Text, TextInput, StyleSheet, Alert, Keyboard, TouchableWithoutFeedback } from 'react-native'
 import AuthContext from '../../context/auth/authContext';
 
 
@@ -12,7 +12,13 @@ const Login = ({ navigation }) => {
         password: '',
     })
 
-    const { email, password } = user
+    const { email, password } = user;
+
+    const DismissKeyboard = ({ children }) => (
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+            {children}
+        </TouchableWithoutFeedback>
+    )
 
     useEffect(() => {
         //if a bigger app i would use an id for the error
@@ -47,47 +53,48 @@ const Login = ({ navigation }) => {
     }
 
     return (
-        <View style={styles.container}>
-            <View style={styles.hero}>
-                <Text style={styles.h1}>Hello</Text>
-                <Text style={styles.h2}>Sign into your account</Text>
-            </View>
-            <ScrollView keyboardShouldPersistTaps='handled'>
-            <TextInput
-                style={styles.textInput}
-                placeholder="Email"
-                placeholderTextColor='rgba(28,53,63, .25)'
-                keyboardType='email-address'
-                autoCapitalize = 'none'
-                onChangeText={(value) => setUser({ ...user, email: value })}
-            />
-            <TextInput
-                style={styles.textInput}
-                placeholder="Password"
-                placeholderTextColor='rgba(28,53,63, .25)'
-                secureTextEntry={true}
-                onChangeText={(value) => setUser({ ...user, password: value })}
-            />
-            </ScrollView>
-            <Text style={styles.p}>Forgot Password?</Text>
-            <View style={styles.signInContainer}>
-                <Text style={styles.h2}>Sign in</Text>
-                <Button
-                    style={styles.signInButton}
-                    title='login'
-                    onPress={() => submit()}
+        <DismissKeyboard>
+            <View style={styles.container}>
+                <View style={styles.hero}>
+                    <Text style={styles.h1}>Hello</Text>
+                    <Text style={styles.h2}>Sign into your account</Text>
+                </View>
+                {/* <ScrollView keyboardShouldPersistTaps='handled'> */}
+                <TextInput
+                    style={styles.textInput}
+                    placeholder="Email"
+                    placeholderTextColor='rgba(28,53,63, .25)'
+                    keyboardType='email-address'
+                    autoCapitalize = 'none'
+                    onChangeText={(value) => setUser({ ...user, email: value })}
                 />
-            </View>
-            <View style={styles.signUpContainer}> 
-                <Text style={styles.p2}>Don't have an account?</Text>
-                <Button
-                    style={styles.signUpButton}
-                    title='Sign Up'
-                    onPress={() => navigation.navigate("Register")}
+                <TextInput
+                    style={styles.textInput}
+                    placeholder="Password"
+                    placeholderTextColor='rgba(28,53,63, .25)'
+                    secureTextEntry={true}
+                    onChangeText={(value) => setUser({ ...user, password: value })}
                 />
+                {/* </ScrollView> */}
+                <Text style={styles.p}>Forgot Password?</Text>
+                <View style={styles.signInContainer}>
+                    <Text style={styles.h2}>Sign in</Text>
+                    <Button
+                        style={styles.signInButton}
+                        title='login'
+                        onPress={() => submit()}
+                    />
+                </View>
+                <View style={styles.signUpContainer}> 
+                    <Text style={styles.p2}>Don't have an account?</Text>
+                    <Button
+                        style={styles.signUpButton}
+                        title='Sign Up'
+                        onPress={() => navigation.navigate("Register")}
+                    />
+                </View>
             </View>
-        </View>
-
+        </DismissKeyboard>
     )
 }
 const styles = StyleSheet.create({
