@@ -3,7 +3,7 @@ import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 const RNSpinner = () => (
     <View style={styles.container}>
-        <ActivityIndicator size="large" color="20A4F3"/>
+        <ActivityIndicator size="large" color="#20A4F3"/>
     </View>
 );
 

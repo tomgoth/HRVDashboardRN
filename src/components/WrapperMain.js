@@ -32,7 +32,7 @@ export default function WrapperMain() {
     }, [token, user])
 
     if (loading) {
-        return <Spinner /> 
+        return <RNSpinner /> 
     }
     
     return (
@@ -53,7 +53,8 @@ export default function WrapperMain() {
                     <>
                         <Stack.Screen name="Home" component={MainView} />
                         <Stack.Screen name="Readings" component={HRVReadings} />
-                        <Stack.Screen name="Import" component={Import} />
+                        
+                        {/* <Stack.Screen name="Import" component={Import} /> */}
                     </>
                 )}
         </Stack.Navigator>

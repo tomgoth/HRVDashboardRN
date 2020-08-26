@@ -47,10 +47,9 @@ const Login = ({ navigation }) => {
     }
 
     return (
-        <View>
-            <Text>Hello</Text>
-            <Text>Sign into your account</Text>
-             {/* <Text>Email</Text> */}
+        <View style={styles.container}>
+            <Text style={styles.h1}>Hello</Text>
+            <Text style={styles.p}>Sign into your account</Text>
             <TextInput
                 style={styles.textInput}
                 placeholder="Email"
@@ -59,7 +58,6 @@ const Login = ({ navigation }) => {
                 autoCapitalize = 'none'
                 onChangeText={(value) => setUser({ ...user, email: value })}
             />
-            {/* <Text>Password</Text> */}
             <TextInput
                 style={styles.textInput}
                 placeholder="Password"
@@ -67,28 +65,51 @@ const Login = ({ navigation }) => {
                 secureTextEntry={true}
                 onChangeText={(value) => setUser({ ...user, password: value })}
             />
-            <Text>Sign in</Text>
-            <Button
-                style={styles.button}
-                title='Login'
-                onPress={() => submit()}
-            />
-            <Text>Don't have an account?</Text>
-            <Button
-                style={styles.button}
-                title='Sign Up'
-                onPress={() => navigation.navigate("Register")}
-            />
+            <View>
+                <Text>Sign in</Text>
+                <Button
+                    style={styles.button}
+                    title='login'
+                    onPress={() => submit()}
+                />
+            </View>
+            <View>
+                <Text>Don't have an account?</Text>
+                <Button
+                    style={styles.button}
+                    title='Sign Up'
+                    onPress={() => navigation.navigate("Register")}
+                />
+            </View>
         </View>
 
     )
 }
 const styles = StyleSheet.create({
+    container: {
+        backgroundColor:'#151E29',
+        fontFamily: 'Lato',
+    },
+    h1: {
+        color:'#FFFFFF', 
+        textAlign: 'center', 
+        fontSize: 65,
+        marginTop: 125
+    },
+    p: {
+        color:'#FFFFFF',
+        textAlign: 'center',
+        fontSize: 20,
+        marginBottom: 40
+    },
     textInput: {
-        color: 'gray',
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1
+        backgroundColor: '#ffffff',
+        color: '#20A4f3',
+        width: 300,
+        borderRadius: 25,
+        padding: 15,
+        marginBottom: 10,
+        marginLeft: 40
     },
     button: {
         borderColor: 'gray',
