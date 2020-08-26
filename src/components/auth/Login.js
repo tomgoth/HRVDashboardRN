@@ -56,7 +56,7 @@ const Login = ({ navigation }) => {
             <View style={styles.container}>
                 <ImageBackground
                     style={styles.bgImage}
-                    source={require('../utils/bgLoginImage2.png')}
+                    source={require('../utils/bgLoginImage3.png')}
                 >
 
                 <View style={styles.hero}>
@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
         // alignItems: 'center',
         // opacity: 0.7
         resizeMode: 'cover',
+        right: 0
     },
     hero: {
         marginBottom: 40,
