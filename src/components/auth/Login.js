@@ -1,7 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { View, Button, Text, TextInput, StyleSheet, Alert, Keyboard, TouchableWithoutFeedback, TouchableOpacity} from 'react-native'
 import AuthContext from '../../context/auth/authContext';
-
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 
 
 const Login = ({ navigation }) => {
@@ -52,25 +53,35 @@ const Login = ({ navigation }) => {
             Keyboard.dismiss()
         }}>
             <View style={styles.container}>
+
                 <View style={styles.hero}>
                     <Text style={styles.h1}>Hello</Text>
                     <Text style={styles.h3}>Sign into your account</Text>
                 </View>
-                <TextInput
-                    style={styles.textInput}
-                    placeholder="Email"
-                    placeholderTextColor='rgba(28,53,63, .25)'
-                    keyboardType='email-address'
-                    autoCapitalize = 'none'
-                    onChangeText={(value) => setUser({ ...user, email: value })}
-                />
-                <TextInput
-                    style={styles.textInput}
-                    placeholder="Password"
-                    placeholderTextColor='rgba(28,53,63, .25)'
-                    secureTextEntry={true}
-                    onChangeText={(value) => setUser({ ...user, password: value })}
-                />
+
+                <View style={styles.emailAndPasswordInput}>
+                    <FontAwesomeIcon  icon={faEnvelope} style={styles.emailAndPasswordIcon} size={20} />
+                    <TextInput
+                        style={styles.textInput}
+                        placeholder='Email'
+                        placeholderTextColor='rgba(28,53,63, .25)'
+                        keyboardType='email-address'
+                        autoCapitalize = 'none'
+                        onChangeText={(value) => setUser({ ...user, email: value })}
+                    />
+                </View>
+
+                <View style={styles.emailAndPasswordInput}>
+                    <FontAwesomeIcon icon={faLock} style={styles.emailAndPasswordIcon} size={20}  />
+                    <TextInput
+                        style={styles.textInput}
+                        placeholder="Password"
+                        placeholderTextColor='rgba(28,53,63, .25)'
+                        secureTextEntry={true}
+                        onChangeText={(value) => setUser({ ...user, password: value })}
+                    />
+                </View>
+                
                 <Text style={styles.p}>Forgot Password?</Text>
                 <View style={styles.signInContainer}>
                     <Text style={styles.h2}>Sign in</Text>
@@ -85,15 +96,8 @@ const Login = ({ navigation }) => {
                 </View>
                 <View style={styles.signUpContainer}> 
                     <Text style={styles.p2}>Don't have an account?</Text>
-                    {/* <Button
-                        style={styles.signUpButton}
-                        title='Sign Up'
-                        color='#fff'
-                        onPress={() => navigation.navigate("Register")}
-                    /> */}
                     <TouchableOpacity
                         style={styles.signUpButton}
-                        // title='Sign Up'
                         color='#fff'
                         onPress={() => navigation.navigate("Register")}
                     >
@@ -127,14 +131,25 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 20,
     },
-    textInput: {
-        backgroundColor: '#ffffff',
+    emailAndPasswordInput: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#fff',
         color: '#20A4f3',
-        width: 300,
         borderRadius: 25,
         padding: 15,
         marginBottom: 20,
+        width: 300,
         marginLeft: 40
+    },
+    emailAndPasswordIcon: {
+        marginLeft: 10,
+        marginRight: 10,
+        color: '#20A4f3',
+    },
+    textInput: {
+        color: '#20A4f3',
+        fontSize: 15
     },
     signInContainer: {
         display: 'flex',
@@ -142,7 +157,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-end',
         marginRight: 40,
-        marginTop: 100
+        marginTop: 60
     },
     p: {
         color: '#fff',
@@ -153,8 +168,6 @@ const styles = StyleSheet.create({
     signInButton: {
         backgroundColor: '#20A4f3',
         borderRadius: 50,
-        // borderWidth: 1,
-        // padding: 20,
         height: 75,
         width: 75,
         marginLeft: 10
@@ -170,7 +183,7 @@ const styles = StyleSheet.create({
         alignItems:'center',
         flexDirection: 'row',
         justifyContent: 'center',
-        marginTop: 70,
+        marginTop: 80,
         marginBottom: 100
     },
     p2: {
