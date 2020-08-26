@@ -1,4 +1,5 @@
 import React, { useEffect, useContext } from 'react';
+import { StyleSheet } from 'react-native';
 import MainView from './readiness/MainView.js';
 import Register from './auth/Register';
 import Login from './auth/Login';
@@ -36,13 +37,14 @@ export default function WrapperMain() {
     }
     
     return (
-        <Stack.Navigator>
+        <Stack.Navigator style={styles.navContainer}>
             {!isAuthenticated ? (
                 // No token found, user isn't signed in
                 <>
                     <Stack.Screen
                         name="Login"
                         component={Login}
+                        style={styles.loginNav}
                     />
                     <Stack.Screen
                         name="Register"
@@ -61,4 +63,9 @@ export default function WrapperMain() {
 
     )
 }
+const styles = StyleSheet.create({
+     loginNav: {
+         backgroundColor: '#151E29'
+     }   
+})
 
