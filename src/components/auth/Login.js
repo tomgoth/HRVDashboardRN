@@ -50,21 +50,24 @@ const Login = ({ navigation }) => {
         <View>
             <Text>Hello</Text>
             <Text>Sign into your account</Text>
-             <Text>Email</Text>
+             {/* <Text>Email</Text> */}
             <TextInput
                 style={styles.textInput}
-                placeholder="sample@email.com"
+                placeholder="Email"
                 placeholderTextColor='rgba(28,53,63, .25)'
                 keyboardType='email-address'
                 autoCapitalize = 'none'
                 onChangeText={(value) => setUser({ ...user, email: value })}
             />
-            <Text>Password</Text>
+            {/* <Text>Password</Text> */}
             <TextInput
                 style={styles.textInput}
+                placeholder="Password"
+                placeholderTextColor='rgba(28,53,63, .25)'
                 secureTextEntry={true}
                 onChangeText={(value) => setUser({ ...user, password: value })}
             />
+            <Text>Sign in</Text>
             <Button
                 style={styles.button}
                 title='Login'

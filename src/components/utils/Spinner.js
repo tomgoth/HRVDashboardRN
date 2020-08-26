@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import spinner from './spinner.gif';
 
@@ -21,6 +21,6 @@ const Spinner = () => {
             />
         </View>
     )
-}
+};
 
-export default Spinner
+export default Spinner;
