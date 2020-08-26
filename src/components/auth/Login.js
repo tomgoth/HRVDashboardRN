@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Button, Text, TextInput, StyleSheet, Alert } from 'react-native'
+import { View, Button, Text, TextInput, StyleSheet, Alert, ScrollView } from 'react-native'
 import AuthContext from '../../context/auth/authContext';
 
 
@@ -48,8 +48,11 @@ const Login = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.h1}>Hello</Text>
-            <Text style={styles.p}>Sign into your account</Text>
+            <View style={styles.hero}>
+                <Text style={styles.h1}>Hello</Text>
+                <Text style={styles.h2}>Sign into your account</Text>
+            </View>
+            <ScrollView keyboardShouldPersistTaps='handled'>
             <TextInput
                 style={styles.textInput}
                 placeholder="Email"
@@ -65,18 +68,20 @@ const Login = ({ navigation }) => {
                 secureTextEntry={true}
                 onChangeText={(value) => setUser({ ...user, password: value })}
             />
-            <View>
-                <Text>Sign in</Text>
+            </ScrollView>
+            <Text style={styles.p}>Forgot Password?</Text>
+            <View style={styles.signInContainer}>
+                <Text style={styles.h2}>Sign in</Text>
                 <Button
-                    style={styles.button}
+                    style={styles.signInButton}
                     title='login'
                     onPress={() => submit()}
                 />
             </View>
-            <View>
-                <Text>Don't have an account?</Text>
+            <View style={styles.signUpContainer}> 
+                <Text style={styles.p2}>Don't have an account?</Text>
                 <Button
-                    style={styles.button}
+                    style={styles.signUpButton}
                     title='Sign Up'
                     onPress={() => navigation.navigate("Register")}
                 />
@@ -90,17 +95,19 @@ const styles = StyleSheet.create({
         backgroundColor:'#151E29',
         fontFamily: 'Lato',
     },
+    hero: {
+        marginBottom: 40
+    },
     h1: {
         color:'#FFFFFF', 
         textAlign: 'center', 
         fontSize: 65,
         marginTop: 125
     },
-    p: {
+    h2: {
         color:'#FFFFFF',
         textAlign: 'center',
         fontSize: 20,
-        marginBottom: 40
     },
     textInput: {
         backgroundColor: '#ffffff',
@@ -108,10 +115,38 @@ const styles = StyleSheet.create({
         width: 300,
         borderRadius: 25,
         padding: 15,
-        marginBottom: 10,
+        marginBottom: 20,
         marginLeft: 40
     },
-    button: {
+    signInContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        marginRight: 40,
+        marginTop: 100
+    },
+    p: {
+        color: '#fff',
+        textAlign: 'right',
+        marginRight: 40,
+        textDecorationLine: 'underline'
+    },
+    signInButton: {
+        backgroundColor: '#20A4f3',
+    },
+    signUpContainer: {
+        display: 'flex',
+        alignItems:'center',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginTop: 70,
+        marginBottom: 100
+    },
+    p2: {
+        color: '#fff'
+    },
+    signUpButton: {
         borderColor: 'gray',
         borderWidth: 1
     }
