@@ -1,9 +1,10 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Button, Text, TextInput, StyleSheet, Alert, Keyboard, TouchableWithoutFeedback, TouchableOpacity} from 'react-native'
+import { View, ImageBackground, Text, TextInput, StyleSheet, Alert, Keyboard, TouchableWithoutFeedback, TouchableOpacity} from 'react-native'
 import AuthContext from '../../context/auth/authContext';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 
+// const image = {source: '../utils/bgLoginImage.png'}
 
 const Login = ({ navigation }) => {
     const authContext = useContext(AuthContext)
@@ -53,6 +54,10 @@ const Login = ({ navigation }) => {
             Keyboard.dismiss()
         }}>
             <View style={styles.container}>
+                <ImageBackground
+                    style={styles.bgImage}
+                    source={require('../utils/bgLoginImage2.png')}
+                >
 
                 <View style={styles.hero}>
                     <Text style={styles.h1}>Hello</Text>
@@ -83,6 +88,7 @@ const Login = ({ navigation }) => {
                 </View>
                 
                 <Text style={styles.p}>Forgot Password?</Text>
+
                 <View style={styles.signInContainer}>
                     <Text style={styles.h2}>Sign in</Text>
                     <TouchableOpacity
@@ -94,6 +100,7 @@ const Login = ({ navigation }) => {
                     </TouchableOpacity>
 
                 </View>
+
                 <View style={styles.signUpContainer}> 
                     <Text style={styles.p2}>Don't have an account?</Text>
                     <TouchableOpacity
@@ -104,6 +111,7 @@ const Login = ({ navigation }) => {
                         <Text style={styles.signUpText}>Sign up</Text>
                     </TouchableOpacity>
                 </View>
+                </ImageBackground>
             </View>
         </TouchableWithoutFeedback>
     )
@@ -113,8 +121,17 @@ const styles = StyleSheet.create({
         backgroundColor:'#151E29',
         fontFamily: 'Lato',
     },
+    bgImage: {
+        // flex: 1,
+        // width: '100%',
+        // height: '100%',
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        // opacity: 0.7
+        resizeMode: 'cover',
+    },
     hero: {
-        marginBottom: 40
+        marginBottom: 40,
     },
     h1: {
         color:'#FFFFFF', 
