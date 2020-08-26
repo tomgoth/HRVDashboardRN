@@ -48,6 +48,8 @@ const Login = ({ navigation }) => {
 
     return (
         <View>
+            <Text>Hello</Text>
+            <Text>Sign into your account</Text>
              <Text>Email</Text>
             <TextInput
                 style={styles.textInput}
