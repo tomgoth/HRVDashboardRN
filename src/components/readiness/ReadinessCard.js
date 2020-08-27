@@ -13,8 +13,8 @@ export default function ReadinessCard(props) {
                     
                     <AnimatedCircularProgress
                         style={styles.subCharts}
-                        size={75}
-                        width={5}
+                        size={78}
+                        width={3}
                         fill={percentile*100}
                         rotation={0}
                         tintColor={ 
@@ -53,20 +53,22 @@ const styles = StyleSheet.create({
     subChartTitle: {
         color: '#fff',
         textAlign: 'center',
-        marginTop: 10,
-        width: 150,
-        justifyContent: 'center'
+        marginTop: 5,
+        width: 120,
+        justifyContent: 'center',
+        fontSize: 11
     },
     subChartTime: {
         color: '#fff',
         textAlign: 'center',
-        marginTop: 8,
+        marginTop: 6,
         marginBottom: 15,
-        fontSize: 12
+        fontSize: 11
     },
     subChartValues: {
         color: '#fff',
         fontSize: 20,
+        //fontWeight: 'bold'
         
     }
 
