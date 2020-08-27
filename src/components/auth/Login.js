@@ -54,10 +54,10 @@ const Login = ({ navigation }) => {
             Keyboard.dismiss()
         }}>
             <View style={styles.container}>
-                <ImageBackground
+                {/* <ImageBackground
                     style={styles.bgImage}
                     source={require('../utils/bgLoginImage3.png')}
-                >
+                > */}
 
                 <View style={styles.hero}>
                     <Text style={styles.h1}>Hello</Text>
@@ -111,7 +111,7 @@ const Login = ({ navigation }) => {
                         <Text style={styles.signUpText}>Sign up</Text>
                     </TouchableOpacity>
                 </View>
-                </ImageBackground>
+                {/* </ImageBackground> */}
             </View>
         </TouchableWithoutFeedback>
     )
