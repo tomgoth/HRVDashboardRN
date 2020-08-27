@@ -50,14 +50,23 @@ export default function WrapperMain() {
                                 backgroundColor: '#151E29',
                             },
                             headerTintColor: '#fff',
-                            headerBackTitleStyle: {
-                                fontWeight: 'bold'
-                            }
+                            // headerBackTitleStyle: {
+                            //     fontWeight: 'bold'
+                            // }
                         }}
                     />
                     <Stack.Screen
                         name="Register"
                         component={Register}
+                        options={{
+                            headerStyle: {
+                                backgroundColor: '#151E29',
+                            },
+                            headerTintColor: '#fff',
+                            // headerBackTitleStyle: {
+                            //     fontWeight: 'bold'
+                            // }
+                        }}
                     />
                 </>
             ) : (
