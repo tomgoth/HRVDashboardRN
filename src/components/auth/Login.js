@@ -122,14 +122,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Lato',
     },
     bgImage: {
-        // flex: 1,
-        // width: '100%',
-        // height: '100%',
-        // justifyContent: 'center',
-        // alignItems: 'center',
-        // opacity: 0.7
-        resizeMode: 'cover',
-        right: 0
+        // resizeMode: 'cover',
     },
     hero: {
         marginBottom: 40,

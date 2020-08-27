@@ -37,14 +37,13 @@ export default function WrapperMain() {
     }
     
     return (
-        <Stack.Navigator style={styles.navContainer}>
+        <Stack.Navigator>
             {!isAuthenticated ? (
                 // No token found, user isn't signed in
                 <>
                     <Stack.Screen
                         name="Login"
                         component={Login}
-                        style={styles.loginNav}
                     />
                     <Stack.Screen
                         name="Register"
@@ -63,9 +62,5 @@ export default function WrapperMain() {
 
     )
 }
-const styles = StyleSheet.create({
-     loginNav: {
-         backgroundColor: '#151E29'
-     }   
-})
+
 
