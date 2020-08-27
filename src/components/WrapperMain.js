@@ -80,7 +80,16 @@ export default function WrapperMain() {
                                 },
                                 headerTintColor: '#fff',
                             }} />
-                        <Stack.Screen name="Readings" component={HRVReadings} />
+                        <Stack.Screen 
+                            name="Readings" 
+                            component={HRVReadings}
+                            options={{
+                                headerStyle: {
+                                    backgroundColor: '#151E29',
+                                },
+                                headerTintColor: '#fff',
+                            }}
+                            />
                         
                         {/* <Stack.Screen name="Import" component={Import} /> */}
                     </>

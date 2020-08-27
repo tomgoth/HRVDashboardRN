@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import { FlatList, View, ActivityIndicator, Dimensions } from 'react-native'
+import { FlatList, View, ActivityIndicator, Dimensions, StyleSheet } from 'react-native'
 import { REACT_APP_BACKEND_URI } from 'react-native-dotenv'
 import HRVReadingCard from './HRVReadingCard'
 import axios from 'axios'
@@ -76,16 +76,18 @@ function HRVReadings() {
     }
 
     return (
-        <View style={{ flex: 1, height: height }}>
+        <View style={styles.readingsContainer} style={{height: height, backgroundColor: '#151E29'}}>
             <FlatList
+            style={styles.readingsCardsContainer}
                 data={readings}
                 keyExtractor={item => item._id}
                 renderItem={({ item }) => (
                     <View
-                        style={{
-                            marginTop: 25,
-                            width: '100%'
-                        }}
+                        // style={{
+                        //     marginTop: 25,
+                        //     width: '100%'
+                        // }}
+                        style={styles.readingsCards}
                     >
                         <HRVReadingCard reading={item} />
                     </View>
@@ -102,5 +104,17 @@ function HRVReadings() {
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    readingsContainer: {
+        backgroundColor: '#151E29',
+       
+    },
+    readingsCardsContainer: {
+    },
+    readingsCards: {
+       marginTop: 25
+    }
+})
 
 export default HRVReadings
