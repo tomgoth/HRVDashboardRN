@@ -118,11 +118,7 @@ const Register = ({ navigation }) => {
                         onChangeText={(value) => setUser({ ...user, password2: value })}
                     />
                 </View>
-                {/* <Button
-                    style={styles.button}
-                    title='Register'
-                    onPress={() => submit()}
-                /> */}
+    
                 <View style={styles.signUpContainer}>
                     <Text style={styles.h2}>Create</Text>
                     <TouchableOpacity
@@ -135,13 +131,17 @@ const Register = ({ navigation }) => {
 
                 </View>
 
-                <TouchableOpacity
-                        style={styles.signInButton}
-                        color='#fff'
-                        onPress={() => navigation.navigate("Login")}
-                    >
-                        <Text style={styles.signInText}>Sign in</Text>
+                <View style={styles.signInContainer}> 
+                    <Text style={styles.p2}>Already have an account?</Text>
+                    <TouchableOpacity
+                            style={styles.signInButton}
+                            color='#fff'
+                            onPress={() => navigation.navigate("Log In")}
+                        >
+                            <Text style={styles.signInText}>Sign in</Text>
                     </TouchableOpacity>
+                </View>
+
             </View>
         </TouchableWithoutFeedback>
     )
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
         color:'#FFFFFF', 
         textAlign: 'center', 
         fontSize: 30,
-        marginTop: 125,
+        marginTop: 100,
         marginBottom: 40
     },
     h2: {
@@ -204,14 +204,23 @@ const styles = StyleSheet.create({
         marginTop: 22,
         marginLeft: 20
     },
+    signInContainer: {
+        display: 'flex',
+        alignItems:'center',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginTop: 70,
+        marginBottom: 100
+    },
+    p2: {
+        color: '#fff',
+        fontWeight: '200'
+    },
     signInText: {
         textDecorationLine:'underline',
         color: '#fff',
         marginLeft: 10,
-        fontSize: 18,
-        marginBottom: 80,
-        marginTop: 50,
-        textAlign: 'center'
+        fontSize: 17
     }
 });
 

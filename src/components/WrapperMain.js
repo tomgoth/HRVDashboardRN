@@ -42,17 +42,44 @@ export default function WrapperMain() {
                 // No token found, user isn't signed in
                 <>
                     <Stack.Screen
-                        name="Login"
+                        name="Log In"
                         component={Login}
+                        options={{
+                            // title: 'Welcome',
+                            headerStyle: {
+                                backgroundColor: '#151E29',
+                            },
+                            headerTintColor: '#fff',
+                            // headerBackTitleStyle: {
+                            //     fontWeight: 'bold'
+                            // }
+                        }}
                     />
                     <Stack.Screen
                         name="Register"
                         component={Register}
+                        options={{
+                            headerStyle: {
+                                backgroundColor: '#151E29',
+                            },
+                            headerTintColor: '#fff',
+                            // headerBackTitleStyle: {
+                            //     fontWeight: 'bold'
+                            // }
+                        }}
                     />
                 </>
             ) : (
                     <>
-                        <Stack.Screen name="Home" component={MainView} />
+                        <Stack.Screen 
+                            name="Home" 
+                            component={MainView}
+                            options={{
+                                headerStyle: {
+                                    backgroundColor: '#151E29',
+                                },
+                                headerTintColor: '#fff',
+                            }} />
                         <Stack.Screen name="Readings" component={HRVReadings} />
                         
                         {/* <Stack.Screen name="Import" component={Import} /> */}

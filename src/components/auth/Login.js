@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, ImageBackground, Text, TextInput, StyleSheet, Alert, Keyboard, TouchableWithoutFeedback, TouchableOpacity} from 'react-native'
+import { View, ImageBackground, Image, Text, TextInput, StyleSheet, Alert, Keyboard, TouchableWithoutFeedback, TouchableOpacity} from 'react-native'
 import AuthContext from '../../context/auth/authContext';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
@@ -54,10 +54,12 @@ const Login = ({ navigation }) => {
             Keyboard.dismiss()
         }}>
             <View style={styles.container}>
-                <ImageBackground
+                {/* <ImageBackground
                     style={styles.bgImage}
                     source={require('../utils/bgLoginImage3.png')}
-                >
+                > */}
+
+                <Image style={styles.bgImage} source={require('../utils/Logo.png')} />
 
                 <View style={styles.hero}>
                     <Text style={styles.h1}>Hello</Text>
@@ -111,7 +113,7 @@ const Login = ({ navigation }) => {
                         <Text style={styles.signUpText}>Sign up</Text>
                     </TouchableOpacity>
                 </View>
-                </ImageBackground>
+                {/* </ImageBackground> */}
             </View>
         </TouchableWithoutFeedback>
     )
@@ -122,7 +124,11 @@ const styles = StyleSheet.create({
         fontFamily: 'Lato',
     },
     bgImage: {
-        // resizeMode: 'cover',
+        width: 80,
+        height: 80,
+        marginLeft: 150,
+        marginTop: 30
+        
     },
     hero: {
         marginBottom: 40,
@@ -131,7 +137,7 @@ const styles = StyleSheet.create({
         color:'#FFFFFF', 
         textAlign: 'center', 
         fontSize: 65,
-        marginTop: 125
+        marginTop: 10
     },
     h2: {
         color:'#FFFFFF',
@@ -141,6 +147,7 @@ const styles = StyleSheet.create({
         color:'#FFFFFF',
         textAlign: 'center',
         fontSize: 20,
+        marginBottom: 20
     },
     emailAndPasswordInput: {
         flexDirection: 'row',
@@ -205,7 +212,7 @@ const styles = StyleSheet.create({
         textDecorationLine:'underline',
         color: '#fff',
         marginLeft: 10,
-        fontSize: 16
+        fontSize: 17
     }
 });
 
