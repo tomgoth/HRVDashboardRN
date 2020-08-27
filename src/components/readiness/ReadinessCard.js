@@ -13,7 +13,7 @@ export default function ReadinessCard(props) {
                     
                     <AnimatedCircularProgress
                         style={styles.subCharts}
-                        size={80}
+                        size={75}
                         width={5}
                         fill={percentile*100}
                         rotation={0}
@@ -34,9 +34,7 @@ export default function ReadinessCard(props) {
                     <Text style={styles.subChartTitle}>{`${label}`}</Text>
                     {(domain === 0) ? 
                     <Text style={styles.subChartTime}>{`${moment(createdAt).fromNow()}`}</Text> :
-                    <Text style={styles.subChartTime}>{`${domain} hour average`}</Text>}
-                    
-             
+                    <Text style={styles.subChartTime}>{`${domain} hour average`}</Text>}  
         </View>
     )
 
