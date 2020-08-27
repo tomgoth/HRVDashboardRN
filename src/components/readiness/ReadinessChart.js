@@ -61,7 +61,7 @@ function ReadinessChart() {
                             key={option.value}
                             style={(option.value === domain) ? styles.chartButtonActive : styles.chartButtons}
                         >
-                        <Text style={styles.chartButtonText}>{option.displayName}</Text>
+                        <Text style={(option.value === domain) ? styles.chartButtonTextActive :styles.chartButtonText}>{option.displayName}</Text>
                         </TouchableOpacity>
                         )}
             </View>
@@ -103,6 +103,17 @@ const styles = StyleSheet.create({
         padding: 10,
         marginTop: 15,
         marginBottom: 10,
+    },
+    chartButtonActive: {
+        borderColor: '#20A4F3',
+        borderWidth: 1.5,
+        backgroundColor: '#20A4F3',
+        padding: 10,
+        borderRadius: 10,
+        marginTop: 6,
+    },
+    chartButtonTextActive: {
+        color: '#151E29'
     },
     chartButtonText: {
         color: '#fff'
