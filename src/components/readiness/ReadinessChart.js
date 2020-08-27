@@ -95,10 +95,10 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     chartButtons: {
-        // borderColor: '#20A4F3',
-        // borderWidth: 1,
+        borderColor: '#20A4F3',
+        borderWidth: 1.5,
         //backgroundColor: '#20A4F3',
-        backgroundColor: '#344763',
+        // backgroundColor: '#344763',
         borderRadius: 10,
         padding: 10,
         marginTop: 15,
