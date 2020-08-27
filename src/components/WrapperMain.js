@@ -42,8 +42,18 @@ export default function WrapperMain() {
                 // No token found, user isn't signed in
                 <>
                     <Stack.Screen
-                        name="Login"
+                        name="Log In"
                         component={Login}
+                        options={{
+                            // title: 'Welcome',
+                            headerStyle: {
+                                backgroundColor: '#151E29',
+                            },
+                            headerTintColor: '#fff',
+                            headerBackTitleStyle: {
+                                fontWeight: 'bold'
+                            }
+                        }}
                     />
                     <Stack.Screen
                         name="Register"
