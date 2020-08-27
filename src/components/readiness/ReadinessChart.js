@@ -72,7 +72,9 @@ function ReadinessChart() {
                 chartConfig={chartConfig}
                 hideLegend={true}
             />
+            <View style={styles.subChartContainer}>
             {data.map(item => <ReadinessCard style={styles.subChartsContainer} item={item} key={item.id} domain={domain}/>)}
+            </View>
         </>
     )
 }
@@ -96,12 +98,11 @@ const styles = StyleSheet.create({
     chartButtonText: {
         color: '#fff'
     },
-    subChartsContainer: {
-        // borderColor: '#20A4F3',
-        // borderWidth: 1,
-        // display: 'flex',
-        // flexDirection: 'row'
-        // flexWrap: 'wrap'
+    subChartContainer: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        flexDirection: 'row',
+        marginTop: 20
     }
 })
 
