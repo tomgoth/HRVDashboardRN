@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react'
-import { Dimensions, Button, View } from 'react-native'
+import { Dimensions, Button, View, StyleSheet, TouchableOpacity, Text } from 'react-native'
 import { ProgressChart } from 'react-native-chart-kit'
 import ReadinessCard from './ReadinessCard'
 import ReadinessContext from '../../context/readiness/ReadinessContext'
@@ -46,19 +46,24 @@ function ReadinessChart() {
    
     return (
         <>
-            <View style={
-                {
-                    flex: 1,
-                    flexDirection: 'row',
-                    justifyContent: 'center'
-                }
-            }>
+            <View style={styles.chartButtonContainer}>
             {domainOptions.map(option =>
-                        <Button
-                            title={option.displayName}
+                        // <Button
+                        //     title={option.displayName}
+                        //     onPress={() => handleDomainOption(option.value)}
+                        //     key={option.value}
+                        //     color='#fff'
+                        //     style={styles.chartButtons}
+                        // />
+                        <TouchableOpacity
+                            activeOpacity={0.8}
                             onPress={() => handleDomainOption(option.value)}
                             key={option.value}
-                        />)}
+                            style={styles.chartButtons}
+                        >
+                        <Text style={styles.chartButtonText}>{option.displayName}</Text>
+                        </TouchableOpacity>
+                        )}
             </View>
             <ProgressChart
                 data={readinessData}
@@ -67,10 +72,38 @@ function ReadinessChart() {
                 chartConfig={chartConfig}
                 hideLegend={true}
             />
-            {data.map(item => <ReadinessCard item={item} key={item.id} domain={domain}/>)}
+            {data.map(item => <ReadinessCard style={styles.subChartsContainer} item={item} key={item.id} domain={domain}/>)}
         </>
     )
 }
 
+const styles = StyleSheet.create({
+    chartButtonContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center'
+    },
+    chartButtons: {
+        borderColor: '#20A4F3',
+        borderWidth: 1,
+        borderRadius: 5,
+        padding: 8,
+        marginTop: 15,
+        marginBottom: 15,
+        
+    },
+    chartButtonText: {
+        color: '#fff'
+    },
+    subChartsContainer: {
+        // borderColor: '#20A4F3',
+        // borderWidth: 1,
+        // display: 'flex',
+        // flexDirection: 'row'
+        // flexWrap: 'wrap'
+    }
+})
 
-export default ReadinessChart
+export default ReadinessChart;
+
