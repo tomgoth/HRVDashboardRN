@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text } from 'react-native'
+import { Text, View, StyleSheet } from 'react-native'
 import moment from 'moment'
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
@@ -8,7 +8,7 @@ export default function ReadinessCard(props) {
     const { percentile, label, currentValue, createdAt } = props.item
     const { domain } = props
     return (
-        <>
+        <View>
             <Text>{`${label}:`}</Text>
             <AnimatedCircularProgress
                 size={50}
@@ -33,7 +33,7 @@ export default function ReadinessCard(props) {
             <Text>{`${moment(createdAt).fromNow()}`}</Text> :
             <Text>{`${domain} hour average`}</Text>}
             <Text></Text>
-        </>
+        </View>
     )
 
 }
