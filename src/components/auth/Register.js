@@ -136,7 +136,7 @@ const Register = ({ navigation }) => {
                     <TouchableOpacity
                             style={styles.signInButton}
                             color='#fff'
-                            onPress={() => navigation.navigate("Login")}
+                            onPress={() => navigation.navigate("Log In")}
                         >
                             <Text style={styles.signInText}>Sign in</Text>
                     </TouchableOpacity>
