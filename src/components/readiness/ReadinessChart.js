@@ -59,7 +59,7 @@ function ReadinessChart() {
                             activeOpacity={0.8}
                             onPress={() => handleDomainOption(option.value)}
                             key={option.value}
-                            style={styles.chartButtons}
+                            style={(option.value === domain) ? styles.chartButtonActive : styles.chartButtons}
                         >
                         <Text style={styles.chartButtonText}>{option.displayName}</Text>
                         </TouchableOpacity>
