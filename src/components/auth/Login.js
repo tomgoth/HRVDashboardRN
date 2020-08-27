@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
         textDecorationLine:'underline',
         color: '#fff',
         marginLeft: 10,
-        fontSize: 16
+        fontSize: 17
     }
 });
 
