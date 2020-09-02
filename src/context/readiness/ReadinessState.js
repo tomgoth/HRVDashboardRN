@@ -62,6 +62,7 @@ const ReadinessState = props => {
             setReadinessData()
         })
         .catch(err => {
+            setIsLoading(false)
             console.log("get latest readings error", err)
         })
     }
