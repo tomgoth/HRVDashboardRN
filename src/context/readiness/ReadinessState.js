@@ -14,7 +14,7 @@ import {
 
 const ReadinessState = props => {
     const initialState = {
-        readinessData: {data: [], labels: []},
+        readinessData: { data: [], labels: [] },
         data: [],
         isLoading: true,
         domain: 0
@@ -24,7 +24,7 @@ const ReadinessState = props => {
     const { token } = useContext(AuthContext)
 
     const setReadinessData = () => {
-        
+
         const config = (token) ? {
             headers: {
                 'Content-Type': 'application/json',
@@ -32,20 +32,26 @@ const ReadinessState = props => {
             }
         } : null
 
-        axios.get(`${REACT_APP_BACKEND_URI}/api/readings/readiness/${state.domain}/hour`,config)
-            .then((res) => {
-                dispatch({
-                    type: SET_READINESS,
-                    payload: res.data
+        if (token) {
+            axios.get(`${REACT_APP_BACKEND_URI}/api/readings/readiness/${state.domain}/hour`, config)
+                .then((res) => {
+                    dispatch({
+                        type: SET_READINESS,
+                        payload: res.data
+                    })
                 })
-            })
-            .catch((err) => { 
-                console.log(err)
-                dispatch({
-                    type: SET_LOADING,
-                    payload: false
-                }) 
-            })
+                .catch((err) => {
+                    console.log(err)
+                    dispatch({
+                        type: SET_LOADING,
+                        payload: false
+                    })
+                })
+        }
+        else {
+            setIsLoading(false)
+            console.log("no token !")
+        }
     }
 
     const getLatestReadings = () => {
@@ -55,16 +61,16 @@ const ReadinessState = props => {
             getLatestHRV(token),
             getLatestRHR(token)
         ])
-        .then(values => {
-            const [hrvCount, rhrCount] = values;
-            console.log("awaited hrv count", hrvCount)
-            console.log("awaited rhr count", rhrCount)
-            setReadinessData()
-        })
-        .catch(err => {
-            setIsLoading(false)
-            console.log("get latest readings error", err)
-        })
+            .then(values => {
+                const [hrvCount, rhrCount] = values;
+                console.log("awaited hrv count", hrvCount)
+                console.log("awaited rhr count", rhrCount)
+                setReadinessData()
+            })
+            .catch(err => {
+                setIsLoading(false)
+                console.log("get latest readings error", err)
+            })
     }
 
     const setDomain = (option) => {
