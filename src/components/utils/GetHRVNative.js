@@ -110,7 +110,7 @@ const postReading = (reqData, resolve, reject) => {
         .then(res => {
             HRVPostedCount++
             console.log('HRV Posted Count', HRVPostedCount)
-            if (HRVPostedCount === HRVResultCount) resolve(HRVPostedCount)
+            if (HRVPostedCount >= HRVResultCount) resolve(HRVPostedCount)
         })
         .catch(err => {
             console.log(err)
@@ -123,7 +123,7 @@ const postRHRReading = (reqData, resolve, reject) => {
         .then(res => {
             RHRPostedCount++
             console.log('RHR Posted Count', RHRPostedCount)
-            if (RHRPostedCount === RHRResultCount) resolve(RHRPostedCount)
+            if (RHRPostedCount >= RHRResultCount) resolve(RHRPostedCount)
         })
 
         .catch(err => {
