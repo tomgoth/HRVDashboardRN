@@ -5,6 +5,7 @@ import Register from './auth/Register';
 import Login from './auth/Login';
 import AuthContext from '../context/auth/authContext';
 import { createStackNavigator } from '@react-navigation/stack';
+//import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import setAuthToken from '../utils/setAuthToken';
 import HRVReadings from './readings/HRVReadings.js';
 import Spinner from './utils/Spinner';
@@ -13,7 +14,6 @@ import Import from './import/Import';
 
 
 const Stack = createStackNavigator();
-
 
 export default function WrapperMain() {
 
@@ -45,14 +45,10 @@ export default function WrapperMain() {
                         name="Log In"
                         component={Login}
                         options={{
-                            // title: 'Welcome',
                             headerStyle: {
                                 backgroundColor: '#151E29',
                             },
                             headerTintColor: '#fff',
-                            // headerBackTitleStyle: {
-                            //     fontWeight: 'bold'
-                            // }
                         }}
                     />
                     <Stack.Screen
@@ -63,9 +59,6 @@ export default function WrapperMain() {
                                 backgroundColor: '#151E29',
                             },
                             headerTintColor: '#fff',
-                            // headerBackTitleStyle: {
-                            //     fontWeight: 'bold'
-                            // }
                         }}
                     />
                 </>
@@ -90,13 +83,23 @@ export default function WrapperMain() {
                                 headerTintColor: '#fff',
                             }}
                             />
-                        
-                        {/* <Stack.Screen name="Import" component={Import} /> */}
                     </>
                 )}
         </Stack.Navigator>
-
     )
 }
+
+// const Tab = createBottomTabNavigator();
+
+// export default function BottomNav() {
+//     return (
+//       <NavigationContainer>
+//         <Tab.Navigator>
+//           <Tab.Screen name="Home" component={MainView} />
+//           <Tab.Screen name="Readings" component={HRVReadings} />
+//         </Tab.Navigator>
+//       </NavigationContainer>
+//     );
+//   }
 
 
