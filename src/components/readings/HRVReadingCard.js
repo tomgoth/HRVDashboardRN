@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
         paddingRight: 20,
         paddingTop: 15,
-        paddingBottom: 15,
+        paddingBottom: 10,
     },
     readingsTitle: {
         color: '#fff',
