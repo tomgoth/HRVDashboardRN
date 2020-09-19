@@ -48,13 +48,6 @@ function ReadinessChart() {
         <>
             <View style={styles.chartButtonContainer}>
             {domainOptions.map(option =>
-                        // <Button
-                        //     title={option.displayName}
-                        //     onPress={() => handleDomainOption(option.value)}
-                        //     key={option.value}
-                        //     color='#fff'
-                        //     style={styles.chartButtons}
-                        // />
                         <TouchableOpacity
                             activeOpacity={0.8}
                             onPress={() => handleDomainOption(option.value)}
@@ -97,8 +90,6 @@ const styles = StyleSheet.create({
     chartButtons: {
         borderColor: '#20A4F3',
         borderWidth: 1.5,
-        //backgroundColor: '#20A4F3',
-        // backgroundColor: '#344763',
         borderRadius: 10,
         padding: 10,
         marginTop: 15,
