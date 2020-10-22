@@ -178,7 +178,7 @@ class HRV: RCTEventEmitter {
     //4. Request Authorization
     HKHealthStore().requestAuthorization(toShare: healthKitTypesToWrite,
                                          read: healthKitTypesToRead) { (success, error) in
-                                            return success
+//                                            return success
     }
     return true
   }
