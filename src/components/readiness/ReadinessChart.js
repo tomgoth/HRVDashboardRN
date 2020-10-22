@@ -6,7 +6,7 @@ import ReadinessContext from '../../context/readiness/ReadinessContext'
 
 function ReadinessChart() {
     const readinessContext = useContext(ReadinessContext)
-    const { readinessData, data, domain, getLatestReadings, setReadinessData, setDomain } = readinessContext
+    const { readinessData, data, domain, getLatestReadings, setReadinessData, setDomain, getSWC } = readinessContext
     
     const domainOptions = [
         { displayName: "Latest", value: 0 },

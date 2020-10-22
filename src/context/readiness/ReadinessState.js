@@ -10,6 +10,7 @@ import {
     SET_LOADING,
     SET_DOMAIN
 } from '../types'
+import AlertContext from '../alert/alertContext';
 
 
 const ReadinessState = props => {
@@ -22,9 +23,10 @@ const ReadinessState = props => {
 
     const [state, dispatch] = useReducer(ReadinessReducer, initialState)
     const { token } = useContext(AuthContext)
+    const { setAlert, removeAlert } = useContext(AlertContext)
 
     const setReadinessData = () => {
-
+        getSWC()
         const config = (token) ? {
             headers: {
                 'Content-Type': 'application/json',
@@ -54,6 +56,29 @@ const ReadinessState = props => {
         }
     }
 
+    const getSWC = () => {
+        const config = (token) ? {
+            headers: {
+                'Content-Type': 'application/json',
+                'x-auth-token': token
+            }
+        } : null
+        axios.get(`${REACT_APP_BACKEND_URI}/api/readings/swc`)
+            .then((res) => {
+                const allWithinSWC = Object.values(res.data).reduce((andMapWithinSWC, isWithinSWC) => andMapWithinSWC && isWithinSWC)
+                console.log("swc", res.data)
+                if (!allWithinSWC) {
+                    setAlert("The average of one or more parameters of readiness from the last 7 days are outside of baseline. Consider easy training or rest to get back to baseline." + JSON.stringify(res.data))
+                }
+                else {
+                    removeAlert()
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+
     const getLatestReadings = () => {
         console.log("Get latest readings")
         setIsLoading(true)
@@ -71,6 +96,7 @@ const ReadinessState = props => {
                 setIsLoading(false)
                 console.log("get latest readings error", err)
             })
+        
     }
 
     const setDomain = (option) => {
@@ -99,7 +125,8 @@ const ReadinessState = props => {
                 setIsLoading,
                 getLatestReadings,
                 setReadinessData,
-                setDomain
+                setDomain,
+                getSWC
             }} >
             {props.children}
         </ReadinessContext.Provider>
