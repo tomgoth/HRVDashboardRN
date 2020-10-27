@@ -8,9 +8,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 //import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import setAuthToken from '../utils/setAuthToken';
 import HRVReadings from './readings/HRVReadings.js';
-import Spinner from './utils/Spinner';
 import RNSpinner from './utils/RNSpinner';
-import Import from './import/Import';
+import SmallestWorthwhileChange from './readiness/SmallestWorthwhileChange.js';
 
 
 const Stack = createStackNavigator();
@@ -76,6 +75,16 @@ export default function WrapperMain() {
                         <Stack.Screen 
                             name="Readings" 
                             component={HRVReadings}
+                            options={{
+                                headerStyle: {
+                                    backgroundColor: '#151E29',
+                                },
+                                headerTintColor: '#fff',
+                            }}
+                            />
+                        <Stack.Screen 
+                            name="Smallest Worthwhile Change" 
+                            component={SmallestWorthwhileChange}
                             options={{
                                 headerStyle: {
                                     backgroundColor: '#151E29',
