@@ -1,7 +1,8 @@
 import {
     SET_READINESS,
     SET_LOADING,
-    SET_DOMAIN
+    SET_DOMAIN,
+    SET_SWC
 } from '../types'
 
 export default (state, action) => {
@@ -25,6 +26,11 @@ export default (state, action) => {
             return {
                 ...state,
                 domain: action.payload
+            }
+        case SET_SWC:
+            return {
+                ...state,
+                smallestWorthwhileChange: action.payload
             }
         default:
             return state

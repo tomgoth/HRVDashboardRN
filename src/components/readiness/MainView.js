@@ -9,6 +9,7 @@ import ImportButton from '../import/ImportButton'
 import setAuthToken from '../../utils/setAuthToken'
 import AlertContext from '../../context/alert/alertContext'
 import Alert from '../../components/utils/Alert'
+import SWCButton from './SWCButton'
 
 
 export default function MainView({ navigation }) {
@@ -30,8 +31,7 @@ export default function MainView({ navigation }) {
 
     const { isLoading, getLatestReadings, domain } = useContext(ReadinessContext)
     const { token } = useContext(AuthContext)
-    const alertContext = useContext(AlertContext)
-    const { alert, hasAlert } = alertContext
+    const { alert, hasAlert } = useContext(AlertContext)
 
     const onRefresh = useCallback(() => {
         getLatestReadings()
@@ -49,7 +49,7 @@ export default function MainView({ navigation }) {
                 )}
                 <ReadinessChart />
                 <HRVReadingsButton navigation={navigation} />
-                {/* <ImportButton navigation={navigation} /> */}
+                <SWCButton navigation={navigation} />
                 <Logout />
             </ScrollView>
         </SafeAreaView>
