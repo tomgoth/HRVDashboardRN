@@ -83,7 +83,7 @@ export default function WrapperMain() {
                             }}
                             />
                         <Stack.Screen 
-                            name="Smallest Worthwhile Change" 
+                            name="Baseline" 
                             component={SmallestWorthwhileChange}
                             options={{
                                 headerStyle: {
