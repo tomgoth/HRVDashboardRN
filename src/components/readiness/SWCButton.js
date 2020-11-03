@@ -1,12 +1,12 @@
 import React from 'react'
-import { Button, StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 
 function SWCButton({navigation}){
 
     return (
         <TouchableOpacity 
             style={styles.hrvReadingsBtn}
-            onPress={() => {navigation.navigate("Smallest Worthwhile Change")}}
+            onPress={() => {navigation.navigate("Baseline")}}
         >
             <Text style={styles.hrvReadingsText}>Smallest Worthwhile Change</Text>
         </TouchableOpacity>
