@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react';
-import { StyleSheet } from 'react-native';
+import { NativeModules } from 'react-native';
 import MainView from './readiness/MainView.js';
 import Register from './auth/Register';
 import Login from './auth/Login';
@@ -11,7 +11,7 @@ import HRVReadings from './readings/HRVReadings.js';
 import RNSpinner from './utils/RNSpinner';
 import SmallestWorthwhileChange from './readiness/SmallestWorthwhileChange.js';
 
-
+NativeModules.HRV.authorizeHealthKit()
 const Stack = createStackNavigator();
 
 export default function WrapperMain() {
