@@ -1,7 +1,7 @@
 import React, { useReducer, useContext } from 'react';
 import axios from 'axios'
 import { REACT_APP_BACKEND_URI } from 'react-native-dotenv'
-import { getLatestHRV, getLatestRHR } from '../../components/utils/GetHRVNative'
+import { getLatestECG, getLatestHRV, getLatestRHR } from '../../components/utils/GetHRVNative'
 import ReadinessContext from './ReadinessContext';
 import ReadinessReducer from './ReadinessReducer';
 import AuthContext from '../auth/authContext'
@@ -88,14 +88,18 @@ const ReadinessState = props => {
     const getLatestReadings = () => {
         console.log("Get latest readings")
         setIsLoading(true)
+        
         Promise.all([
             getLatestHRV(token),
-            getLatestRHR(token)
+            getLatestRHR(token),
+            getLatestECG()
         ])
             .then(values => {
-                const [hrvCount, rhrCount] = values;
+                const [hrvCount, rhrCount, ecgCount] = values;
                 console.log("awaited hrv count", hrvCount)
                 console.log("awaited rhr count", rhrCount)
+                console.log("awaited ecg count", ecgCount)
+
                 setReadinessData()
             })
             .catch(err => {
