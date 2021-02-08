@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, ImageBackground, Image, Text, TextInput, StyleSheet, Alert, Keyboard, TouchableWithoutFeedback, TouchableOpacity} from 'react-native'
+import { ScrollView, View, ImageBackground, Image, Text, TextInput, StyleSheet, Alert, Keyboard, TouchableWithoutFeedback, TouchableOpacity} from 'react-native'
 import AuthContext from '../../context/auth/authContext';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
@@ -53,7 +53,7 @@ const Login = ({ navigation }) => {
         <TouchableWithoutFeedback onPress={() => {
             Keyboard.dismiss()
         }}>
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
                 {/* <ImageBackground
                     style={styles.bgImage}
                     source={require('../utils/bgLoginImage3.png')}
@@ -114,7 +114,7 @@ const Login = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
                 {/* </ImageBackground> */}
-            </View>
+            </ScrollView>
         </TouchableWithoutFeedback>
     )
 }

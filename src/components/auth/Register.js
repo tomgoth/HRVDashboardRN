@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, Alert, Keyboard, TouchableWithoutFeedback, TouchableOpacity } from 'react-native'
+import { ScrollView, View, Text, TextInput, StyleSheet, Alert, Keyboard, TouchableWithoutFeedback, TouchableOpacity } from 'react-native'
 // import AlertContext from '../context/alert/alertContext';
 import AuthContext from '../../context/auth/authContext'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -71,7 +71,7 @@ const Register = ({ navigation }) => {
         <TouchableWithoutFeedback onPress={() => {
             Keyboard.dismiss()
         }} >
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
                 <Text style={styles.h1}>Create account</Text>
 
                 <View style={styles.inputContainers}>
@@ -142,7 +142,7 @@ const Register = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
 
-            </View>
+            </ScrollView>
         </TouchableWithoutFeedback>
     )
 }
