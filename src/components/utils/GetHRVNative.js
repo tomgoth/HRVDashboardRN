@@ -21,9 +21,9 @@ export async function getLatestHRV(token) {
         emitter.removeAllListeners('OnHRVComplete')
         emitter.addListener(
             'OnHRVComplete',
-            res => {
+            async (res) => {
                 const beatData = JSON.parse(res.beatData)
-                postReading({...beatData, isECG: false}, resolve, reject)
+                await postReading({ ...beatData, isECG: false }, resolve, reject)
             }
         )
         const config = (token) ? {
@@ -56,8 +56,8 @@ export async function getLatestRHR(token) {
         emitter.removeAllListeners('OnRHRComplete')
         emitter.addListener(
             'OnRHRComplete',
-            res => {
-                postRHRReading(JSON.parse(res.rhrData), resolve, reject)
+            async (res) => {
+                await postRHRReading(JSON.parse(res.rhrData), resolve, reject)
             }
         )
         const config = (token) ? {
@@ -103,39 +103,39 @@ export async function getLatestECG(token) {
     })
 }
 
-const postReading = (reqData, resolve, reject) => {
-    axios.post(`${REACT_APP_BACKEND_URI}/api/readings/hrv`, reqData)
-        .then(res => {
-            HRVPostedCount++
-            console.log('HRV Posted Count', HRVPostedCount)
-            if (HRVPostedCount >= HRVResultCount) resolve(HRVPostedCount)
-        })
-        .catch(err => {
-            console.log(err)
-            reject(err)
-        })
+const postReading = async (reqData, resolve, reject) => {
+    try {
+        const res = await axios.post(`${REACT_APP_BACKEND_URI}/api/readings/hrv`, reqData)
+        HRVPostedCount++
+        console.log('HRV Posted Count', HRVPostedCount)
+        if (HRVPostedCount >= HRVResultCount) resolve(HRVPostedCount)
+    }
+    catch {
+        console.log(err)
+        reject(err)
+    }
 }
 
-const postRHRReading = (reqData, resolve, reject) => {
-    axios.post(`${REACT_APP_BACKEND_URI}/api/readings/rhr`, reqData)
-        .then(res => {
-            RHRPostedCount++
-            console.log('RHR Posted Count', RHRPostedCount)
-            if (RHRPostedCount >= RHRResultCount) resolve(RHRPostedCount)
-        })
-
-        .catch(err => {
-            console.log(err)
-            reject(err)
-        })
+const postRHRReading = async (reqData, resolve, reject) => {
+    try {
+        const res = await axios.post(`${REACT_APP_BACKEND_URI}/api/readings/rhr`, reqData)
+        RHRPostedCount++
+        console.log('RHR Posted Count', RHRPostedCount)
+        if (RHRPostedCount >= RHRResultCount) resolve(RHRPostedCount)
+    }
+    catch {
+        console.log(err)
+        reject(err)
+    }
 }
 
 const postECGReading = async (reqData, resolve, reject) => {
     //post ECG to back end
-    const {ecg, date, averageHR} = reqData
+    const { ecg, date, averageHR } = reqData
     const rs = await computeRRIntervals(ecg, averageHR)
-    postReading({beatToBeat: rs, date: date, isECG: true}, (count) => {}, reject)
+    await postReading({ beatToBeat: rs, date: date, isECG: true }, (count) => { }, reject)
     ECGPostedCount++
+    console.log("ecg posted", ECGPostedCount, 'ecg result', ECGResultCount)
     if (ECGPostedCount >= ECGResultCount) resolve(ECGPostedCount)
 }
 
@@ -167,9 +167,9 @@ const ecgListeners = (resolve, reject) => {
     emitter.removeAllListeners('OnECGComplete')
     emitter.addListener(
         'OnECGComplete',
-        res => {
-            postECGReading(JSON.parse(res.ecgData), resolve, reject)
-    })
+        async (res) => {
+            await postECGReading(JSON.parse(res.ecgData), resolve, reject)
+        })
     emitter.removeAllListeners('ECGResultCount')
     emitter.addListener(
         'ECGResultCount',
@@ -177,7 +177,7 @@ const ecgListeners = (resolve, reject) => {
             ECGResultCount = JSON.parse(res.resultCount)
             if (ECGResultCount === 0) resolve(0)
             console.log('ECG Result Count', ECGResultCount)
-    })
+        })
 
 
 }
@@ -189,56 +189,57 @@ const computeRRIntervals = (ecg, averageHR) => {
         //double differnce and square
         let d1 = ecg.map((e, i) => {
             const ei = e.voltageQuantity
-            const ei1 = (i < n - 1) ? ecg[i+1].voltageQuantity : 0
+            const ei1 = (i < n - 1) ? ecg[i + 1].voltageQuantity : 0
             return ei1 - ei
         })
         d1 = d1.slice(0, n - 1)
-        
+
         let d2 = d1.map((d1j, j) => {
-            const d1j1 = (j < n - 2) ? d1[j+1] : 0
+            const d1j1 = (j < n - 2) ? d1[j + 1] : 0
             return d1j1 - d1j
         })
         d2 = d2.slice(0, n - 2)
-        d = d2.map((dj, j) => {return {...ecg[j], d: Math.pow(dj, 2)}}) 
+        d = d2.map((dj, j) => { return { ...ecg[j], d: Math.pow(dj, 2) } })
         d = d.sort((a, b) => b.d - a.d)// sort in descending order
         const threshold = d[0].d * 0.03
         d = d.filter(e => e.d > threshold)
-    
+
         console.log("d length", d.length)
-    
+
         let qrs = []
-        
+
         // establish the qrs windows into their own array
         d.forEach(e => {
             const withinWindow = qrs.filter(r => {
-                return Math.abs( e.timeSinceSeriesStart - r.timeSinceSeriesStart)*1000 < 75
+                return Math.abs(e.timeSinceSeriesStart - r.timeSinceSeriesStart) * 1000 < 75
             }) //iz within 75ms
             if (withinWindow.length === 0) {
-                qrs.push(e) 
+                qrs.push(e)
             }
         });
-    
+
         //find max and min voltage for each window and average them to get a baseline
         qrs = qrs.map(window => {
             return ecg.reduce((acc, cv) => {
                 return {
-                    max: (cv.voltageQuantity > acc.max && Math.abs(cv.timeSinceSeriesStart - window.timeSinceSeriesStart)*1000 < 75) ? cv.voltageQuantity : acc.max,
-                    min: (cv.voltageQuantity < acc.min && Math.abs(cv.timeSinceSeriesStart - window.timeSinceSeriesStart)*1000 < 75) ? cv.voltageQuantity : acc.min
+                    max: (cv.voltageQuantity > acc.max && Math.abs(cv.timeSinceSeriesStart - window.timeSinceSeriesStart) * 1000 < 75) ? cv.voltageQuantity : acc.max,
+                    min: (cv.voltageQuantity < acc.min && Math.abs(cv.timeSinceSeriesStart - window.timeSinceSeriesStart) * 1000 < 75) ? cv.voltageQuantity : acc.min
                 }
-            }, {max: 0, min: 0})
-        }).map((cv, i) => { return {...qrs[i], baseline: (cv.max + cv.min)/2 }})//mean of max and min
+            }, { max: 0, min: 0 })
+        }).map((cv, i) => { return { ...qrs[i], baseline: (cv.max + cv.min) / 2 } })//mean of max and min
         //use relative magnitude to find the R Peak voltage
         let rs = qrs.map(window => {
             return ecg.reduce((acc, cv) => {
                 const relAmp = cv.voltageQuantity - window.baseline
-                return (relAmp > acc.relAmp && Math.abs(cv.timeSinceSeriesStart - window.timeSinceSeriesStart)*1000 < 75) ? {...cv, relAmp: relAmp} : acc 
-            }, {relAmp: 0})
+                return (relAmp > acc.relAmp && Math.abs(cv.timeSinceSeriesStart - window.timeSinceSeriesStart) * 1000 < 75) ? { ...cv, relAmp: relAmp } : acc
+            }, { relAmp: 0 })
         })
-    
+
         //sort and map the 
         rs = rs.sort((a, b) => a.timeSinceSeriesStart - b.timeSinceSeriesStart).map((cv, i) => {
-            return {timeSinceSeriesStart: cv.timeSinceSeriesStart, precededByGap: false}})
-    
+            return { timeSinceSeriesStart: cv.timeSinceSeriesStart, precededByGap: false }
+        })
+
         const averageNN = (60 / averageHR) * 1000 //average NN from the ECG reading in healthkit
         rs = rs.filter((cv, i) => {
             if (i < 1) {
@@ -257,7 +258,7 @@ const computeRRIntervals = (ecg, averageHR) => {
                 }
             }
         })
-    
+
         //add average Rs where the duration between beats is more than 180%
         const newRRs = []
         rs.forEach((cv, i) => {
@@ -265,25 +266,25 @@ const computeRRIntervals = (ecg, averageHR) => {
             const b = cv.timeSinceSeriesStart
             const rr = (b - a) * 1000
             if (rr >= 1.8 * averageNN) {
-                newRRs.push({...cv, timeSinceSeriesStart: (a + averageNN/1000)})
+                newRRs.push({ ...cv, timeSinceSeriesStart: (a + averageNN / 1000) })
             }
         })
         console.log("new RRs", newRRs)
-    
+
         //combine and sort the new rrs
         rs = [...rs, ...newRRs].sort((a, b) => a.timeSinceSeriesStart - b.timeSinceSeriesStart)
-    
-        
+
+
         // rrs for debugging    
         let rrs = rs.map((cv, i) => {
-            return (i < rs.length - 2) ? (rs[i+1].timeSinceSeriesStart - cv.timeSinceSeriesStart) * 1000 : 0
+            return (i < rs.length - 2) ? (rs[i + 1].timeSinceSeriesStart - cv.timeSinceSeriesStart) * 1000 : 0
         }).slice(0, rs.length - 2)
-    
+
         console.log("rrs", rrs)
-    
-        const avgHR = 60 / ((rrs.reduce((acc, cv) => cv + acc) / 1000)/ rrs.length )
+
+        const avgHR = 60 / ((rrs.reduce((acc, cv) => cv + acc) / 1000) / rrs.length)
         console.log("average HR from RRs", avgHR, "average HR from healthkit", averageHR)
-        
+
         //console.log('rs indentifid', rs)
         resolve(rs)
     })
