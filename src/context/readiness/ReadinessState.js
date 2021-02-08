@@ -92,10 +92,11 @@ const ReadinessState = props => {
         Promise.all([
             getLatestHRV(token),
             getLatestRHR(token),
-            getLatestECG()
+            getLatestECG(token)
         ])
             .then(values => {
                 const [hrvCount, rhrCount, ecgCount] = values;
+                // const [hrvCount, rhrCount ] = values;
                 console.log("awaited hrv count", hrvCount)
                 console.log("awaited rhr count", rhrCount)
                 console.log("awaited ecg count", ecgCount)

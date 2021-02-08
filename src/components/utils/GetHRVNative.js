@@ -22,7 +22,8 @@ export async function getLatestHRV(token) {
         emitter.addListener(
             'OnHRVComplete',
             res => {
-                postReading(JSON.parse({...res.beatData, isECG: false}), resolve, reject)
+                const beatData = JSON.parse(res.beatData)
+                postReading({...beatData, isECG: false}, resolve, reject)
             }
         )
         const config = (token) ? {
@@ -82,10 +83,23 @@ export async function getLatestRHR(token) {
     })
 }
 
-export async function getLatestECG() {
-    return new Promise((resolve, reject) => {
+export async function getLatestECG(token) {
+    return new Promise(async (resolve, reject) => {
         ecgListeners(resolve, reject)
-        NativeModules.HRV.getLatestECG('')
+        const config = (token) ? {
+            headers: {
+                'Content-Type': 'application/json',
+                'x-auth-token': token
+            }
+        } : null
+        const mostRecent = await axios.get(`${REACT_APP_BACKEND_URI}/api/readings/ecg/mostrecent`, config)
+        console.log("most recent ECG", mostRecent.data)
+        if (mostRecent.data) {
+            NativeModules.HRV.getLatestECG(mostRecent.data.createdAt)
+        }
+        else {
+            NativeModules.HRV.getLatestECG('')
+        }
     })
 }
 
@@ -120,8 +134,9 @@ const postECGReading = async (reqData, resolve, reject) => {
     //post ECG to back end
     const {ecg, date, averageHR} = reqData
     const rs = await computeRRIntervals(ecg, averageHR)
-    console.log("average hr", averageHR)
-    postReading({beatToBeat: rs, date: date, isECG: true}, resolve, reject)
+    postReading({beatToBeat: rs, date: date, isECG: true}, (count) => {}, reject)
+    ECGPostedCount++
+    if (ECGPostedCount >= ECGResultCount) resolve(ECGPostedCount)
 }
 
 const rhrResultCount = (resolve) => {

@@ -261,11 +261,15 @@ class HRV: RCTEventEmitter {
         }
         return
       }
-      print("ECG SAMPLES COUNT", samples.count)
-      self.sendEvent(withName: "ECGResultCount", body:["resultCount": samples.count])
+      var sampleCount = 0
       for sample in samples {
-        self.getECGData(sample: sample)
+        if (sample.classification == HKElectrocardiogram.Classification.sinusRhythm) {
+          self.getECGData(sample: sample)
+          sampleCount += 1
+        }
       }
+      self.sendEvent(withName: "ECGResultCount", body:["resultCount": sampleCount])
+
     }
   }
   
